@@ -1,0 +1,90 @@
+__license__ = '''
+Copyright 2010 Jake Wharton
+
+rcdict is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as
+published by the Free Software Foundation, either version 3 of
+the License, or (at your option) any later version.
+
+rcdict is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General
+Public License along with rcdict.  If not, see
+<http://www.gnu.org/licenses/>.
+'''
+
+from datetime import datetime
+import os
+import re
+import sys
+import urllib2
+
+__all__ = ['Vimeo', 'YouTube']
+
+class Provider(object):
+  HEADERS = {
+    'User-Agent': 'Mozilla/5.0 (X11; U; Linux i686) Gecko/20071127 Firefox/2.0.0.11',
+  }
+
+  def __init__(self, id, **kwargs):
+    self.debugging = kwargs.pop('debug', False)
+
+    self.id = id
+    self.debug('Provider', '__init__', 'id', id)
+
+    self.out_file = kwargs.pop('out_file', None)
+    self.debug('Provider', '__init__', 'out_file', self.out_file)
+
+    self.html = urllib2.urlopen(urllib2.Request(self.get_data_url(), headers=Provider.HEADERS)).read()
+    self.debug('Provider', '__init__', 'len(html)', len(self.html))
+
+
+  def get_data_url(self):
+    raise ImportError
+  def get_download_url(self):
+    raise ImportError
+  def get_filename(self):
+    raise ImportError
+
+  def get_title(self):
+    title = self.id
+    self.debug('Provider', 'get_title', 'title: ' + title)
+    return title
+
+  def run(self):
+    try:
+      url = urllib2.urlopen(urllib2.Request(self.get_download_url(), headers=Provider.HEADERS))
+      self.download_callback(url)
+
+      #get_filename() MUST occur after download_callback()
+      if self.out_file is None:
+        self.out_file = self.get_filename()
+      self.out_file = re.sub(ur'[?\[\]\/\\=+<>:;",*]+', '_', self.out_file, re.UNICODE)
+      self.debug('Provider', 'run', 'out_file', self.out_file)
+
+      out = open(self.out_file, 'wb')
+      out.write(url.read())
+      out.close()
+      url.close()
+    except KeyboardInterrupt, e:
+      print "Aborting download of %s..." % self.out_file
+    except (urllib2.HTTPError, IOError), e:
+      print "Can not process download: %s" % e
+
+  def debug(self, cls, method, *args):
+    if self.debugging:
+      argc = len(args)
+      if argc == 2:
+        print '%s %s:%s %s = %s' % (datetime.now(), cls, method, args[0], args[1])
+      else:
+        print '%s %s:%s - %s' % (datetime.now(), cls, method, args[0])
+
+  def download_callback(self, url):
+    pass
+
+
+from vimeo import Vimeo
+from youtube import YouTube
