@@ -1,10 +1,32 @@
 py-video-downloader
 ===================
-Python module and script for downloading video source files from the major streaming sites (YouTube, Vimeo, etc.)
+Python module and script for downloading video source files from the major
+streaming sites (YouTube, Vimeo, etc.)
 
 Usage
 =====
-Coming soon... see `video-downloader.py` for now.
+Videos from Vimeo or YouTube can be downloaded by specifying them as
+command-line arguments.
+
+    Usage: video-downloader.py [options]
+
+    Options:
+      --version        show program's version number and exit
+      -h, --help       show this help message and exit
+
+      Video Provider Switches:
+        -V VIMEO_ID    Download video from YouTube.
+        -Y YOUTUBE_ID  Download video from Vimeo.
+
+      Display Options:
+        --debug        Turn on debugging output on.
+
+Example
+-------
+The following will download one video from Vimeo and two from YouTube:
+
+    ./video-downloader.py -V 5720832 -Y tgbNymZ7vqY -Y tgbNymZ7vqY
+
 
 Developed By
 ============

@@ -28,7 +28,7 @@ if __name__ == '__main__':
   DEFAULT_DEBUG = False
 
   version =  '''
-  video-downloader-1.0.0pre - by Jake Wharton <jakewharton@gmail.com>
+  video-downloader-1.0.0 - by Jake Wharton <jakewharton@gmail.com>
   '''
   parser = OptionParser(usage="Usage: %prog [options] file1 [... fileN]", version=version)
 
