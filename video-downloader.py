@@ -19,43 +19,47 @@ Public License along with py-video-downloader.  If not, see
 '''
 
 from optparse import OptionParser, OptionGroup
-from providers import YouTube, Vimeo
+import providers
+import sys
+
+def main():
+    DEFAULT_DEBUG = False
+
+    version =  'video-downloader-1.1.0pre - by Jake Wharton <jakewharton@gmail.com>'
+    parser = OptionParser(usage="Usage: %prog -p PROVIDER [-f FORMAT] [--debug] videoID [... videoID]", version=version)
+
+    parser.add_option('-p', '--provider', dest='provider', help='Online provider from where to download the video. (Available: %s)'%', '.join(["'%s'" % provider for provider in providers.__all__]))
+    parser.add_option('-f', '--format', dest='format', help='Format of video to download. Run with no video IDs for a provider specific list.')
+    parser.add_option('--debug', dest='is_debug', action='store_true', default=DEFAULT_DEBUG, help='Enable debugging output.')
+
+    options, videos = parser.parse_args()
+
+    print version
+    print
+
+    #TODO: Load provider
+    try:
+        provider = getattr(providers, options.provider)
+    except Exception:
+        print 'ERROR: Could not load provider "%s".' % options.provider
+        sys.exit(1)
+
+    if len(videos) == 0:
+        print '%-10s %-40s' % ('Format', 'Description')
+        print '-'*10, '-'*40
+        for format in provider.FORMATS.iteritems():
+            print '%-10s %-40s' % format
+    else:
+        if options.format is None:
+            options.format = provider.DEFAULT
+
+        for video in videos:
+            v = provider(video, format=options.format, debug=options.is_debug)
+            print 'Downloading %s ("%s")...' % (video, v.get_title())
+            v.run()
+
+        print
+        print 'Done.'
 
 if __name__ == '__main__':
-  DEFAULT_VIMEO = []
-  DEFAULT_YOUTUBE = []
-
-  DEFAULT_DEBUG = False
-
-  version =  '''
-  video-downloader-1.0.0 - by Jake Wharton <jakewharton@gmail.com>
-  '''
-  parser = OptionParser(usage="Usage: %prog [options] file1 [... fileN]", version=version)
-
-  group = OptionGroup(parser, 'Video Provider Switches')
-  group.add_option('-V', dest='vimeo_id', action='append', default=DEFAULT_VIMEO, help='Download video from YouTube.')
-  group.add_option('-Y', dest='youtube_id', action='append', default=DEFAULT_YOUTUBE, help='Download video from Vimeo.')
-  parser.add_option_group(group)
-
-  group = OptionGroup(parser, "Display Options")
-  group.add_option('--debug', dest='is_debug', action='store_true', default=DEFAULT_DEBUG, help='Turn on debugging output on.')
-  parser.add_option_group(group)
-
-  options, args = parser.parse_args()
-
-  if len(args) > 0:
-    raise ValueError('All video IDs must be specified with a provider switch.')
-  if len(options.vimeo_id) == 0 and len(options.youtube_id) == 0:
-    raise ValueError('You must specify at least one video to download.')
-
-  for video in options.vimeo_id:
-    v = Vimeo(video, debug=options.is_debug)
-    print 'Downloading %s ("%s")...' % (video, v.get_title())
-    v.run()
-  for video in options.youtube_id:
-    v = YouTube(video, debug=options.is_debug)
-    print 'Downloading %s ("%s")...' % (video, v.get_title())
-    v.run()
-
-  print
-  print 'Done.'
+    main()

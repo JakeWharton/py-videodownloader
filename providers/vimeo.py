@@ -20,50 +20,58 @@ from providers import Provider
 import re
 
 class Vimeo(Provider):
-  def __init__(self, id, **kwargs):
-    Provider.__init__(self, id, **kwargs)
+    DEFAULT = ''
+    FORMATS = {
+        '<omit>': '640x360 H.264/AAC Stereo MP4'
+        'hd': '1280x720 H.264/AAC Stereo MP4'
+    }
 
-    self.format = kwargs.pop('format', 'hd')
-    self.debug('Vimeo', '__init__', 'format', self.format)
+    def __init__(self, id, **kwargs):
+        Provider.__init__(self, id, **kwargs)
 
-
-  def get_title(self):
-    match = re.search(r'<caption>(.+)<\/caption>', self.html)
-    if match:
-      title = match.group(1).decode('utf-8')
-    else:
-      title = Provider.get_title(self)
-    self.debug('Vimeo', 'get_title', 'title', title)
-    return title
-
-  def get_filename(self):
-    filename = "%s.%s" % (self.get_title(), self.extension)
-    self.debug('Vimeo', 'get_filename', 'filename', filename)
-    return filename
-
-  def download_callback(self, url):
-    self.extension = re.search(r'(mp4|flv)', url.geturl()).group(1)
-    self.debug('Vimeo', 'download_callback', 'extension', self.extension)
-
-  def get_data_url(self):
-    url = 'http://vimeo.com/moogaloop/load/clip:%s' % self.id
-    self.debug('Vimeo', 'get_data_url', 'url', url)
-    return url
-
-  def get_download_url(self):
-    url = 'http://vimeo.com/moogaloop/play/clip:%s/%s/%s/?q=%s' % (self.id, self._get_signature(), self._get_signature_expiration(), self.format)
-    self.debug('Vimeo', 'get_download_url', 'url', url)
-    return url
+        self.format = kwargs.pop('format', Vimeo.DEFAULT)
+        self.debug('Vimeo', '__init__', 'format', self.format)
 
 
-  def _get_signature(self):
-    match = re.search(r'<request_signature>(.+)<\/request_signature>', self.html)
-    value = match.group(1) if match else None
-    self.debug('Vimeo', '_get_signature', 'signature', value)
-    return value
+    def get_title(self):
+        match = re.search(r'<caption>(.+)<\/caption>', self.html)
+        if match:
+            title = match.group(1).decode('utf-8')
+        else:
+            title = Provider.get_title(self)
+        self.debug('Vimeo', 'get_title', 'title', title)
+        return title
 
-  def _get_signature_expiration(self):
-    match = re.search (r'<request_signature_expires>(.+)<\/request_signature_expires>', self.html)
-    value = match.group(1) if match else None
-    self.debug('Vimeo', '_get_signature_expiration', 'expiration', value)
-    return value
+    def get_filename(self):
+        filename = "%s.%s" % (self.get_title(), self.extension)
+        self.debug('Vimeo', 'get_filename', 'filename', filename)
+        return filename
+
+    def download_callback(self, url):
+        self.extension = re.search(r'(mp4|flv)', url.geturl()).group(1)
+        self.debug('Vimeo', 'download_callback', 'extension', self.extension)
+
+    def get_data_url(self):
+        url = 'http://vimeo.com/moogaloop/load/clip:%s' % self.id
+        self.debug('Vimeo', 'get_data_url', 'url', url)
+        return url
+
+    def get_download_url(self):
+        url = 'http://vimeo.com/moogaloop/play/clip:%s/%s/%s/' % (self.id, self._get_signature(), self._get_signature_expiration())
+        if self.format:
+            url += '?q=%s' % self.format
+        self.debug('Vimeo', 'get_download_url', 'url', url)
+        return url
+
+
+    def _get_signature(self):
+        match = re.search(r'<request_signature>(.+)<\/request_signature>', self.html)
+        value = match.group(1) if match else None
+        self.debug('Vimeo', '_get_signature', 'signature', value)
+        return value
+
+    def _get_signature_expiration(self):
+        match = re.search (r'<request_signature_expires>(.+)<\/request_signature_expires>', self.html)
+        value = match.group(1) if match else None
+        self.debug('Vimeo', '_get_signature_expiration', 'expiration', value)
+        return value

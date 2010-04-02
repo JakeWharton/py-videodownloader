@@ -25,65 +25,65 @@ import urllib2
 __all__ = ['Vimeo', 'YouTube']
 
 class Provider(object):
-  HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (X11; U; Linux i686) Gecko/20071127 Firefox/2.0.0.11',
-  }
+    HEADERS = {
+        'User-Agent': 'Mozilla/5.0 (X11; U; Linux i686) Gecko/20071127 Firefox/2.0.0.11',
+    }
 
-  def __init__(self, id, **kwargs):
-    self.debugging = kwargs.pop('debug', False)
+    def __init__(self, id, **kwargs):
+        self.debugging = kwargs.pop('debug', False)
 
-    self.id = id
-    self.debug('Provider', '__init__', 'id', id)
+        self.id = id
+        self.debug('Provider', '__init__', 'id', id)
 
-    self.out_file = kwargs.pop('out_file', None)
-    self.debug('Provider', '__init__', 'out_file', self.out_file)
+        self.out_file = kwargs.pop('out_file', None)
+        self.debug('Provider', '__init__', 'out_file', self.out_file)
 
-    self.html = urllib2.urlopen(urllib2.Request(self.get_data_url(), headers=Provider.HEADERS)).read()
-    self.debug('Provider', '__init__', 'len(html)', len(self.html))
+        self.html = urllib2.urlopen(urllib2.Request(self.get_data_url(), headers=Provider.HEADERS)).read()
+        self.debug('Provider', '__init__', 'len(html)', len(self.html))
 
 
-  def get_data_url(self):
-    raise ImportError
-  def get_download_url(self):
-    raise ImportError
-  def get_filename(self):
-    raise ImportError
+    def get_data_url(self):
+        raise ImportError
+    def get_download_url(self):
+        raise ImportError
+    def get_filename(self):
+        raise ImportError
 
-  def get_title(self):
-    title = self.id
-    self.debug('Provider', 'get_title', 'title: ' + title)
-    return title
+    def get_title(self):
+        title = self.id
+        self.debug('Provider', 'get_title', 'title: ' + title)
+        return title
 
-  def run(self):
-    try:
-      url = urllib2.urlopen(urllib2.Request(self.get_download_url(), headers=Provider.HEADERS))
-      self.download_callback(url)
+    def run(self):
+        try:
+            url = urllib2.urlopen(urllib2.Request(self.get_download_url(), headers=Provider.HEADERS))
+            self.download_callback(url)
 
-      #get_filename() MUST occur after download_callback()
-      if self.out_file is None:
-        self.out_file = self.get_filename()
-      self.out_file = re.sub(ur'[?\[\]\/\\=+<>:;",*]+', '_', self.out_file, re.UNICODE)
-      self.debug('Provider', 'run', 'out_file', self.out_file)
+            #get_filename() MUST occur after download_callback()
+            if self.out_file is None:
+                self.out_file = self.get_filename()
+            self.out_file = re.sub(ur'[?\[\]\/\\=+<>:;",*]+', '_', self.out_file, re.UNICODE)
+            self.debug('Provider', 'run', 'out_file', self.out_file)
 
-      out = open(self.out_file, 'wb')
-      out.write(url.read())
-      out.close()
-      url.close()
-    except KeyboardInterrupt, e:
-      print "Aborting download of %s..." % self.out_file
-    except (urllib2.HTTPError, IOError), e:
-      print "Can not process download: %s" % e
+            out = open(self.out_file, 'wb')
+            out.write(url.read())
+            out.close()
+            url.close()
+        except KeyboardInterrupt, e:
+            print "Aborting download of %s..." % self.out_file
+        except (urllib2.HTTPError, IOError), e:
+            print "Can not process download: %s" % e
 
-  def debug(self, cls, method, *args):
-    if self.debugging:
-      argc = len(args)
-      if argc == 2:
-        print '%s %s:%s %s = %s' % (datetime.now(), cls, method, args[0], args[1])
-      else:
-        print '%s %s:%s - %s' % (datetime.now(), cls, method, args[0])
+    def debug(self, cls, method, *args):
+        if self.debugging:
+            argc = len(args)
+            if argc == 2:
+                print '%s %s:%s %s = %s' % (datetime.now(), cls, method, args[0], args[1])
+            else:
+                print '%s %s:%s - %s' % (datetime.now(), cls, method, args[0])
 
-  def download_callback(self, url):
-    pass
+    def download_callback(self, url):
+        pass
 
 
 from vimeo import Vimeo
