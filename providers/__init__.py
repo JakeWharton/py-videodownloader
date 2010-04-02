@@ -38,7 +38,7 @@ class Provider(object):
         self.dir = kwargs.pop('dir', '.')
         self.debug('Provider', '__init__', 'dir', self.dir)
 
-        self.out_file = os.path.join(self.dir, kwargs.pop('out_file', None))
+        self.out_file = kwargs.pop('out_file', None)
         self.debug('Provider', '__init__', 'out_file', self.out_file)
 
         self.html = urllib2.urlopen(urllib2.Request(self.get_data_url(), headers=Provider.HEADERS)).read()
@@ -64,7 +64,7 @@ class Provider(object):
 
             #get_filename() MUST occur after download_callback()
             if self.out_file is None:
-                self.out_file = self.get_filename()
+                self.out_file = os.path.join(self.dir, self.get_filename())
             self.out_file = re.sub(ur'[?\[\]\/\\=+<>:;",*]+', '_', self.out_file, re.UNICODE)
             self.debug('Provider', 'run', 'out_file', self.out_file)
 
