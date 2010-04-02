@@ -56,7 +56,7 @@ def main():
             options.fmt = provider.DEFAULT
 
         for video in videos:
-            v = provider(video, format=options.fmt, debug=options.is_debug)
+            v = provider(video, format=options.fmt, dir=options.dir, debug=options.is_debug)
             print 'Downloading %s ("%s")...' % (video, v.get_title())
             v.run()
 
