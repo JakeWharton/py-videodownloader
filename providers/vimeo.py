@@ -22,8 +22,8 @@ import re
 class Vimeo(Provider):
     DEFAULT = ''
     FORMATS = {
-        '<omit>': '640x360 H.264/AAC Stereo MP4'
-        'hd': '1280x720 H.264/AAC Stereo MP4'
+        '<omit>': '640x360 H.264/AAC Stereo MP4',
+        'hd': '1280x720 H.264/AAC Stereo MP4',
     }
 
     def __init__(self, id, **kwargs):

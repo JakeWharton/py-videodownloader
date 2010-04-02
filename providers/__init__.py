@@ -35,7 +35,10 @@ class Provider(object):
         self.id = id
         self.debug('Provider', '__init__', 'id', id)
 
-        self.out_file = kwargs.pop('out_file', None)
+        self.dir = kwargs.pop('dir', '.')
+        self.debug('Provider', '__init__', 'dir', self.dir)
+
+        self.out_file = os.path.join(self.dir, kwargs.pop('out_file', None))
         self.debug('Provider', '__init__', 'out_file', self.out_file)
 
         self.html = urllib2.urlopen(urllib2.Request(self.get_data_url(), headers=Provider.HEADERS)).read()

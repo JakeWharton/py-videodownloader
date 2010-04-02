@@ -26,10 +26,12 @@ def main():
     DEFAULT_DEBUG = False
 
     version =  'video-downloader-1.1.0pre - by Jake Wharton <jakewharton@gmail.com>'
-    parser = OptionParser(usage="Usage: %prog -p PROVIDER [-f FORMAT] [--debug] videoID [... videoID]", version=version)
+    parser = OptionParser(usage="Usage: %prog -p PROVIDER [-f FMT] [-o DIR] videoID [... videoID]", version=version)
 
-    parser.add_option('-p', '--provider', dest='provider', help='Online provider from where to download the video. (Available: %s)'%', '.join(["'%s'" % provider for provider in providers.__all__]))
-    parser.add_option('-f', '--format', dest='format', help='Format of video to download. Run with no video IDs for a provider specific list.')
+    provider_list = ', '.join(["'%s'" % provider for provider in providers.__all__])
+    parser.add_option('-f', '--format', dest='fmt', help='Format of video to download. Run with no video IDs for a provider specific list.')
+    parser.add_option('-d', '--directory', dest='dir', help='Other directory to place downloaded files.')
+    parser.add_option('-p', '--provider', dest='provider', help='Online provider from where to download the video. (Available: %s)'%provider_list)
     parser.add_option('--debug', dest='is_debug', action='store_true', default=DEFAULT_DEBUG, help='Enable debugging output.')
 
     options, videos = parser.parse_args()
@@ -50,11 +52,11 @@ def main():
         for format in provider.FORMATS.iteritems():
             print '%-10s %-40s' % format
     else:
-        if options.format is None:
-            options.format = provider.DEFAULT
+        if options.fmt is None:
+            options.fmt = provider.DEFAULT
 
         for video in videos:
-            v = provider(video, format=options.format, debug=options.is_debug)
+            v = provider(video, format=options.fmt, debug=options.is_debug)
             print 'Downloading %s ("%s")...' % (video, v.get_title())
             v.run()
 
