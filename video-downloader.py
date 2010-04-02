@@ -19,8 +19,10 @@ Public License along with py-video-downloader.  If not, see
 '''
 
 from optparse import OptionParser, OptionGroup
-import providers
 import sys
+import os
+
+import providers
 
 def main():
     DEFAULT_DEBUG = False
@@ -58,7 +60,13 @@ def main():
         for video in videos:
             v = provider(video, format=options.fmt, dir=options.dir, debug=options.is_debug)
             print 'Downloading %s ("%s")...' % (video, v.get_title())
-            v.run()
+            try:
+                v.run()
+            except KeyboardInterrupt:
+                try:
+                    os.remove(v.out_file)
+                except IOError:
+                    print 'WARNING: Could not remove partial file.'
 
         print
         print 'Done.'
