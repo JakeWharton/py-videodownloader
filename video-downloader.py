@@ -28,7 +28,7 @@ def main():
     DEFAULT_DEBUG = False
 
     version =  'video-downloader-1.1.0pre - by Jake Wharton <jakewharton@gmail.com>'
-    parser = OptionParser(usage="Usage: %prog -p PROVIDER [-f FMT] [-o DIR] videoID [... videoID]", version=version)
+    parser = OptionParser(usage="Usage: %prog -p PROVIDER [-f FMT] [-d DIR] videoID [... videoID]", version=version)
 
     provider_list = ', '.join(["'%s'" % provider for provider in providers.__all__])
     parser.add_option('-f', '--format', dest='fmt', help='Format of video to download. Run with no video IDs for a provider specific list.')
@@ -41,7 +41,6 @@ def main():
     print version
     print
 
-    #TODO: Load provider
     try:
         provider = getattr(providers, options.provider)
     except Exception:
@@ -49,24 +48,31 @@ def main():
         sys.exit(1)
 
     if len(videos) == 0:
+        #Print out a format list for that provider
         print '%-10s %-40s' % ('Format', 'Description')
         print '-'*10, '-'*40
         for format in provider.FORMATS.iteritems():
             print '%-10s %-40s' % format
     else:
+        #Default to a format if none was specified
         if options.fmt is None:
             options.fmt = provider.DEFAULT
 
         for video in videos:
             v = provider(video, format=options.fmt, dir=options.dir, debug=options.is_debug)
-            print 'Downloading %s ("%s")...' % (video, v.get_title())
+            print 'Downloading "%s"...' % v.get_title()
             try:
                 v.run()
             except KeyboardInterrupt:
+                print "WARNING: Aborting download."
+
+                #Try to delete partially completed file
                 try:
                     os.remove(v.out_file)
                 except IOError:
                     print 'WARNING: Could not remove partial file.'
+            except (urllib2.HTTPError, IOError):
+                print "ERROR: Fatal HTTP error."
 
         print
         print 'Done.'

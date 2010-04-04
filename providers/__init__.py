@@ -58,26 +58,21 @@ class Provider(object):
         return title
 
     def run(self):
-        try:
-            url = urllib2.urlopen(urllib2.Request(self.get_download_url(), headers=Provider.HEADERS))
-            self.download_callback(url)
+        url = urllib2.urlopen(urllib2.Request(self.get_download_url(), headers=Provider.HEADERS))
+        self.download_callback(url)
 
-            #get_filename() MUST occur after download_callback()
-            if self.out_file is None:
-                self.out_file = self.get_filename()
-            if self.out_dir is not None:
-                self.out_file = os.path.join(self.out_dir, self.out_file)
-            self.out_file = re.sub(ur'[?\[\]\/\\=+<>:;",*]+', '_', self.out_file, re.UNICODE)
-            self.debug('Provider', 'run', 'out_file', self.out_file)
+        #get_filename() MUST occur after download_callback()
+        if self.out_file is None:
+            self.out_file = self.get_filename()
+        if self.out_dir is not None:
+            self.out_file = os.path.join(self.out_dir, self.out_file)
+        self.out_file = re.sub(ur'[?\[\]\/\\=+<>:;",*]+', '_', self.out_file, re.UNICODE)
+        self.debug('Provider', 'run', 'out_file', self.out_file)
 
-            out = open(self.out_file, 'wb')
-            out.write(url.read())
-            out.close()
-            url.close()
-        except KeyboardInterrupt, e:
-            print "Aborting download of %s..." % self.out_file
-        except (urllib2.HTTPError, IOError), e:
-            print "Can not process download: %s" % e
+        out = open(self.out_file, 'wb')
+        out.write(url.read())
+        out.close()
+        url.close()
 
     def debug(self, cls, method, *args):
         if self.debugging:

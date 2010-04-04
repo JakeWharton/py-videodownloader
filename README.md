@@ -8,7 +8,7 @@ Usage
 Videos from various providers can be specified using the following command line
 format:
 
-    Usage: video-downloader.py -p PROVIDER [-f FMT] [-o DIR] videoID [... videoID]
+    Usage: video-downloader.py -p PROVIDER [-f FMT] [-d DIR] videoID [... videoID]
 
     Options:
       --version             show program's version number and exit
