@@ -35,8 +35,8 @@ class Provider(object):
         self.id = id
         self.debug('Provider', '__init__', 'id', id)
 
-        self.dir = kwargs.pop('dir', '.')
-        self.debug('Provider', '__init__', 'dir', self.dir)
+        self.out_dir = kwargs.pop('dir', None)
+        self.debug('Provider', '__init__', 'out_dir', self.out_dir)
 
         self.out_file = kwargs.pop('out_file', None)
         self.debug('Provider', '__init__', 'out_file', self.out_file)
@@ -64,7 +64,9 @@ class Provider(object):
 
             #get_filename() MUST occur after download_callback()
             if self.out_file is None:
-                self.out_file = os.path.join(self.dir, self.get_filename())
+                self.out_file = self.get_filename()
+            if self.out_dir is not None:
+                self.out_file = os.path.join(self.out_dir, self.out_file)
             self.out_file = re.sub(ur'[?\[\]\/\\=+<>:;",*]+', '_', self.out_file, re.UNICODE)
             self.debug('Provider', 'run', 'out_file', self.out_file)
 

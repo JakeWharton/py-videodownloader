@@ -18,6 +18,7 @@ Public License along with py-video-downloader.  If not, see
 
 from providers import Provider
 import re
+import urllib
 
 class YouTube(Provider):
     DEFAULT = '35'
@@ -56,14 +57,14 @@ class YouTube(Provider):
         return filename
 
     def get_data_url(self):
-        url = 'http://www.youtube.com/watch?v=%s' % self.id
+        url = 'http://youtube.com/watch?v=%s' % self.id
         self.debug('YouTube', 'get_data_url', 'url', url)
         return url
 
     def get_download_url(self):
         if str(self.format) not in YouTube.FORMATS.keys():
           raise ValueError('Format code "%s" not found in format list.' % self.format)
-        url = 'http://www.youtube.com/get_video.php?video_id=%s&fmt=%s&t=%s' % (self.id, self.format, self._get_token())
+        url = 'http://youtube.com/get_video?video_id=%s&fmt=%s&t=%s' % (self.id, self.format, self._get_token())
         self.debug('YouTube', 'get_download_url', 'url', url)
         return url
 
@@ -72,7 +73,7 @@ class YouTube(Provider):
         '''
         Magic method which extracts session token from HTML. Session token needed for video download URL
         '''
-        match = re.search(r', "t": "([^&"]+)"', self.html)
-        token = match.group(1) if match else None
+        match = re.search(r'&t=([-_0-9a-zA-Z]+%3D)', self.html)
+        token = urllib.unquote(match.group(1)) if match else None
         self.debug('YouTube', '_get_token', 'token', token)
         return token
