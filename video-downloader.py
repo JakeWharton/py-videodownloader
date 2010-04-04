@@ -27,7 +27,7 @@ import providers
 def main():
     DEFAULT_DEBUG = False
 
-    version =  'video-downloader-1.1.0pre - by Jake Wharton <jakewharton@gmail.com>'
+    version =  'video-downloader-1.1.0 - by Jake Wharton <jakewharton@gmail.com>'
     parser = OptionParser(usage="Usage: %prog -p PROVIDER [-f FMT] [-d DIR] videoID [... videoID]", version=version)
 
     provider_list = ', '.join(["'%s'" % provider for provider in providers.__all__])
