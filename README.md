@@ -5,27 +5,48 @@ streaming sites (YouTube, Vimeo, etc.)
 
 Usage
 =====
-Videos from Vimeo or YouTube can be downloaded by specifying them as
-command-line arguments.
+Videos from various providers can be specified using the following command line
+format:
 
-    Usage: video-downloader.py [options]
+    Usage: video-downloader.py -p PROVIDER [-f FMT] [-o DIR] videoID [... videoID]
 
     Options:
-      --version        show program's version number and exit
-      -h, --help       show this help message and exit
-
-      Video Provider Switches:
-        -V VIMEO_ID    Download video from YouTube.
-        -Y YOUTUBE_ID  Download video from Vimeo.
-
-      Display Options:
-        --debug        Turn on debugging output on.
+      --version             show program's version number and exit
+      -h, --help            show this help message and exit
+      -f FMT, --format=FMT  Format of video to download. Run with no video IDs for
+                            a provider specific list.
+      -d DIR, --directory=DIR
+                            Other directory to place downloaded files.
+      -p PROVIDER, --provider=PROVIDER
+                            Online provider from where to download the video.
+                            (Available: 'Vimeo', 'YouTube')
+      --debug               Enable debugging output.
 
 Example
 -------
-The following will download one video from Vimeo and two from YouTube:
+The following two commands will download a 720p video from Vimeo and a 1080p
+one from YouTube.
 
-    ./video-downloader.py -V 5720832 -Y tgbNymZ7vqY -Y tgbNymZ7vqY
+    $ ./video-downloader.py -p Vimeo -f hd 5720832
+    $ ./video-downloader.py -p YouTube -f 37 tgbNymZ7vqY
+
+To see a list of the formats supported by a provider run the command without
+any video IDs.
+
+    $ ./video-downloader.py -p YouTube
+    video-downloader-1.1.0 - by Jake Wharton <jakewharton@gmail.com>
+
+    Format     Description
+    ---------- ----------------------------------------
+    13         176x144 3GP/AMR Mono 3GP
+    17         176x144 3GP/AAC Mono 3GP
+    22         1280x720 H.264/AAC Stereo MP4
+    18         480x360/480x270 H.264/AAC Stereo MP4
+    37         1920x1080 H.264/AAC Stereo MP4
+    35         640x480/640x360 H.264/AAC Stereo FLV
+    34         320x240 H.264/AAC Stereo FLV
+    5          320x240 H.263/MP3 Mono FLV
+    6          320x240 H.263/MP3 Mono FLV
 
 
 Developed By
