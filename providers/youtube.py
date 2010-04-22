@@ -21,10 +21,9 @@ import re
 import urllib
 
 class YouTube(Provider):
-    DEFAULT = '35'
+    DEFAULT = set(['37', '22', '35', '18', '34', '5'])
     FORMATS = {
         '5' : '320x240 H.263/MP3 Mono FLV',
-        '6' : '320x240 H.263/MP3 Mono FLV',
         '13': '176x144 3GP/AMR Mono 3GP',
         '17': '176x144 3GP/AAC Mono 3GP',
         '18': '480x360/480x270 H.264/AAC Stereo MP4',
@@ -35,10 +34,27 @@ class YouTube(Provider):
     }
 
     def __init__(self, id, **kwargs):
-        Provider.__init__(self, id, **kwargs)
+        super(YouTube, self).__init__(id, **kwargs)
 
-        self.format = kwargs.pop('format', YouTube.DEFAULT)
-        self.debug('YouTube', '__init__', 'format', self.format)
+        self.format = kwargs.pop('format', None)
+        self._html = None
+        self._formats = None
+
+
+    @property
+    def html(self):
+        if self._html is None:
+            self._html = Provider._download(self._get_data_url()).read()
+        return self._html
+
+    @property
+    def formats(self):
+        if self._formats is None:
+            self._formats = set()
+            for match in re.finditer(r'itag(?:%3D|=)(\d+)', self.html):
+                self._formats.add(match.group(1))
+            self._debug('YouTube', 'formats', 'formats', ', '.join(self._formats))
+        return self._formats
 
 
     def get_title(self):
@@ -46,28 +62,39 @@ class YouTube(Provider):
         if match:
             title = match.group(1).decode('utf-8').strip()
         else:
-            title = Provider.get_title(self)
+            title = super(YouTube, self).get_title()
 
-        self.debug('YouTube', 'get_title', 'title', title)
+        self._debug('YouTube', 'get_title', 'title', title)
         return title
 
     def get_filename(self):
-        filename = '%s.mp4' % self.get_title()
-        self.debug('YouTube', 'get_filename', 'filename', filename)
+        if self.format not in self.formats:
+            self.format = self._get_best_format()
+
+        #Title + last three letters of the format description lowercased
+        filename = self.get_title() + YouTube.FORMATS[self.format][-3:].lower()
+        self._debug('YouTube', 'get_filename', 'filename', filename)
         return filename
 
-    def get_data_url(self):
-        url = 'http://youtube.com/watch?v=%s' % self.id
-        self.debug('YouTube', 'get_data_url', 'url', url)
-        return url
-
     def get_download_url(self):
-        if str(self.format) not in YouTube.FORMATS.keys():
-          raise ValueError('Format code "%s" not found in format list.' % self.format)
+        if self.format not in self.formats:
+            self.format = self._get_best_format()
         url = 'http://youtube.com/get_video?video_id=%s&fmt=%s&t=%s' % (self.id, self.format, self._get_token())
-        self.debug('YouTube', 'get_download_url', 'url', url)
+        self._debug('YouTube', 'get_download_url', 'url', url)
         return url
 
+
+    def _get_best_format(self):
+        for format in YouTube.DEFAULT:
+            if format in self.formats:
+                self._debug('YouTube', '_get_best_format', 'format', format)
+                return format
+        raise ValueError("Could not determine the best available format. YouTube has likely changed its page layout. Please contact the author of this script.")
+
+    def _get_data_url(self):
+        url = 'http://youtube.com/watch?v=%s' % self.id
+        self._debug('YouTube', '_get_data_url', 'url', url)
+        return url
 
     def _get_token(self):
         '''
@@ -75,5 +102,5 @@ class YouTube(Provider):
         '''
         match = re.search(r'&t=([-_0-9a-zA-Z]+%3D)', self.html)
         token = urllib.unquote(match.group(1)) if match else None
-        self.debug('YouTube', '_get_token', 'token', token)
+        self._debug('YouTube', '_get_token', 'token', token)
         return token

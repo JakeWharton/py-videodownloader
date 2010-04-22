@@ -33,32 +33,36 @@ class Provider(object):
         self.debugging = kwargs.pop('debug', False)
 
         self.id = id
-        self.debug('Provider', '__init__', 'id', id)
+        self._debug('Provider', '__init__', 'id', id)
 
         self.out_dir = kwargs.pop('dir', None)
-        self.debug('Provider', '__init__', 'out_dir', self.out_dir)
+        self._debug('Provider', '__init__', 'out_dir', self.out_dir)
 
         self.out_file = kwargs.pop('out_file', None)
-        self.debug('Provider', '__init__', 'out_file', self.out_file)
+        self._debug('Provider', '__init__', 'out_file', self.out_file)
 
-        self.html = urllib2.urlopen(urllib2.Request(self.get_data_url(), headers=Provider.HEADERS)).read()
-        self.debug('Provider', '__init__', 'len(html)', len(self.html))
+    ###########################################################################
 
-
-    def get_data_url(self):
-        raise ImportError
+    #The following two methods MUST be overriden by the implementing class
     def get_download_url(self):
         raise ImportError
     def get_filename(self):
         raise ImportError
 
+    #Optional override which occurs after the download url is opened by urllib2
+    def download_callback(self, url):
+        pass
+
+    #Recommended to be overriden by implementing class, otherwise just video ID
     def get_title(self):
         title = self.id
-        self.debug('Provider', 'get_title', 'title: ' + title)
+        self._debug('Provider', 'get_title', 'title: ' + title)
         return title
 
+    ###########################################################################
+
     def run(self):
-        url = urllib2.urlopen(urllib2.Request(self.get_download_url(), headers=Provider.HEADERS))
+        url = Provider._download(self.get_download_url())
         self.download_callback(url)
 
         #get_filename() MUST occur after download_callback()
@@ -67,14 +71,14 @@ class Provider(object):
         if self.out_dir is not None:
             self.out_file = os.path.join(self.out_dir, self.out_file)
         self.out_file = re.sub(ur'[?\[\]\/\\=+<>:;",*]+', '_', self.out_file, re.UNICODE)
-        self.debug('Provider', 'run', 'out_file', self.out_file)
+        self._debug('Provider', 'run', 'out_file', self.out_file)
 
         out = open(self.out_file, 'wb')
         out.write(url.read())
         out.close()
         url.close()
 
-    def debug(self, cls, method, *args):
+    def _debug(self, cls, method, *args):
         if self.debugging:
             argc = len(args)
             if argc == 2:
@@ -82,8 +86,9 @@ class Provider(object):
             else:
                 print '%s %s:%s - %s' % (datetime.now(), cls, method, args[0])
 
-    def download_callback(self, url):
-        pass
+    @staticmethod
+    def _download(url):
+        return urllib2.urlopen(urllib2.Request(url, headers=Provider.HEADERS))
 
 
 from vimeo import Vimeo

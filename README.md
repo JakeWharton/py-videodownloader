@@ -34,7 +34,7 @@ To see a list of the formats supported by a provider run the command without
 any video IDs.
 
     $ ./video-downloader.py -p YouTube
-    video-downloader-1.1.0 - by Jake Wharton <jakewharton@gmail.com>
+    video-downloader-1.2.0 - by Jake Wharton <jakewharton@gmail.com>
 
     Format     Description
     ---------- ----------------------------------------

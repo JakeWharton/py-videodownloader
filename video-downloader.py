@@ -27,8 +27,10 @@ import providers
 def main():
     DEFAULT_DEBUG = False
 
-    version =  'video-downloader-1.1.0 - by Jake Wharton <jakewharton@gmail.com>'
-    parser = OptionParser(usage="Usage: %prog -p PROVIDER [-f FMT] [-d DIR] videoID [... videoID]", version=version)
+    print 'video-downloader-1.2.0pre - by Jake Wharton <jakewharton@gmail.com>'
+    print
+
+    parser = OptionParser(usage="Usage: %prog -p PROVIDER [-f FMT] [-d DIR] videoID [... videoID]")
 
     provider_list = ', '.join(["'%s'" % provider for provider in providers.__all__])
     parser.add_option('-f', '--format', dest='fmt', help='Format of video to download. Run with no video IDs for a provider specific list.')
@@ -37,9 +39,6 @@ def main():
     parser.add_option('--debug', dest='is_debug', action='store_true', default=DEFAULT_DEBUG, help='Enable debugging output.')
 
     options, videos = parser.parse_args()
-
-    print version
-    print
 
     try:
         provider = getattr(providers, options.provider)
@@ -54,10 +53,6 @@ def main():
         for format in provider.FORMATS.iteritems():
             print '%-10s %-40s' % format
     else:
-        #Default to a format if none was specified
-        if options.fmt is None:
-            options.fmt = provider.DEFAULT
-
         for video in videos:
             v = provider(video, format=options.fmt, dir=options.dir, debug=options.is_debug)
             print 'Downloading "%s"...' % v.get_title()
