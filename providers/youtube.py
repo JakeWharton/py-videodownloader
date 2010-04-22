@@ -44,7 +44,7 @@ class YouTube(Provider):
     @property
     def html(self):
         if self._html is None:
-            self._html = Provider._download(self._get_data_url()).read()
+            self._html = super(YouTube)._download(self._get_data_url()).read()
         return self._html
 
     @property
@@ -52,6 +52,8 @@ class YouTube(Provider):
         if self._formats is None:
             self._formats = set()
             for match in re.finditer(r'itag(?:%3D|=)(\d+)', self.html):
+                if match.group(1) not in YouTube.FORMATS.keys():
+                    print 'WARNING: Unknown format "%s" found.'
                 self._formats.add(match.group(1))
             self._debug('YouTube', 'formats', 'formats', ', '.join(self._formats))
         return self._formats
@@ -68,16 +70,20 @@ class YouTube(Provider):
         return title
 
     def get_filename(self):
-        if self.format not in self.formats:
+        if self.format is None:
             self.format = self._get_best_format()
 
-        #Title + last three letters of the format description lowercased
-        filename = self.get_title() + YouTube.FORMATS[self.format][-3:].lower()
+        if self.format not in YouTube.FORMATS.keys():
+            filename = self.get_title() + '.video'
+        else:
+            #Title + last three letters of the format description lowercased
+            filename = self.get_title() + YouTube.FORMATS[self.format][-3:].lower()
+
         self._debug('YouTube', 'get_filename', 'filename', filename)
         return filename
 
     def get_download_url(self):
-        if self.format not in self.formats:
+        if self.format is None:
             self.format = self._get_best_format()
         url = 'http://youtube.com/get_video?video_id=%s&fmt=%s&t=%s' % (self.id, self.format, self._get_token())
         self._debug('YouTube', 'get_download_url', 'url', url)

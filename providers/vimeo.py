@@ -27,7 +27,7 @@ class Vimeo(Provider):
     }
 
     def __init__(self, id, **kwargs):
-        Provider.__init__(self, id, **kwargs)
+        super(Vimeo, self).__init__(id, **kwargs)
 
         self.format = kwargs.pop('format', None)
         self.extension = 'mp4' #Set via download_callback but needs a default
@@ -38,7 +38,7 @@ class Vimeo(Provider):
     @property
     def html(self):
         if self._html is None:
-            self._html = Provider._download(self._get_data_url()).read()
+            self._html = super(Vimeo)._download(self._get_data_url()).read()
         return self._html
 
     @property
@@ -56,7 +56,7 @@ class Vimeo(Provider):
         if match:
             title = match.group(1).decode('utf-8')
         else:
-            title = Provider.get_title(self)
+            title = super(Vimeo, self).get_title()
         self._debug('Vimeo', 'get_title', 'title', title)
         return title
 
