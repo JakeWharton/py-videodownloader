@@ -38,7 +38,7 @@ class Vimeo(Provider):
     @property
     def html(self):
         if self._html is None:
-            self._html = super(Vimeo)._download(self._get_data_url()).read()
+            self._html = super(Vimeo, Vimeo)._download(self._get_data_url()).read()
         return self._html
 
     @property

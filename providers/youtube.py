@@ -44,7 +44,7 @@ class YouTube(Provider):
     @property
     def html(self):
         if self._html is None:
-            self._html = super(YouTube)._download(self._get_data_url()).read()
+            self._html = super(YouTube, YouTube)._download(self._get_data_url()).read()
         return self._html
 
     @property
