@@ -1,7 +1,8 @@
 py-video-downloader
 ===================
 Python module and script for downloading video source files from the major
-streaming sites (YouTube, Vimeo, etc.)
+online streaming sites (YouTube, Vimeo, etc.)
+
 
 Usage
 =====
@@ -11,7 +12,6 @@ format:
     Usage: video-downloader.py -p PROVIDER [-f FMT] [-d DIR] videoID [... videoID]
 
     Options:
-      --version             show program's version number and exit
       -h, --help            show this help message and exit
       -f FMT, --format=FMT  Format of video to download. Run with no video IDs for
                             a provider specific list.
@@ -48,6 +48,9 @@ any video IDs.
     5          320x240 H.263/MP3 Mono FLV
     6          320x240 H.263/MP3 Mono FLV
 
+Omitting a format will automatically download the best format available for
+that video from the provider.
+
 
 Developed By
 ============
@@ -56,11 +59,15 @@ Developed By
 Git repository located at
 [http://github.com/JakeWharton/py-video-downloader](http://github.com/JakeWharton/py-video-downloader)
 
+
 Thanks
 ======
 *   __chexov__
 
-    For `py-youtube-downloader`, the inspiration and basis for this module and script. Check it out at [http://github.com/chexov/py-youtube-downloader](http://github.com/chexov/py-youtube-downloader).
+    For `py-youtube-downloader`, the inspiration and basis for this module and
+    script. Check it out at
+    [http://github.com/chexov/py-youtube-downloader](http://github.com/chexov/py-youtube-downloader).
+
 
 License
 =======

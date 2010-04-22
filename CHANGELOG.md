@@ -1,8 +1,8 @@
 Change Log
 ==========
 
-Version 1.2.0 *(In Development)*
---------------------------------
+Version 1.2.0 *(2010-04-21)*
+----------------------------
 New Features:
 
  * Ability to determine valid formats for a specific video.
