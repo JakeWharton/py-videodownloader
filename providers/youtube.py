@@ -21,7 +21,7 @@ import re
 import urllib
 
 class YouTube(Provider):
-    DEFAULT = set(['37', '22', '35', '18', '34', '5'])
+    DEFAULT = ['37', '22', '35', '18', '34', '5']
     FORMATS = {
         '5' : '320x240 H.263/MP3 Mono FLV',
         '13': '176x144 3GP/AMR Mono 3GP',

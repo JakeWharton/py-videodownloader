@@ -20,7 +20,7 @@ from providers import Provider
 import re
 
 class Vimeo(Provider):
-    DEFAULT = set(['hd', 'sd'])
+    DEFAULT = ['hd', 'sd']
     FORMATS = {
         'sd': '640x360 H.264/AAC Stereo MP4',
         'hd': '1280x720 H.264/AAC Stereo MP4',

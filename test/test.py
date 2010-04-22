@@ -28,34 +28,30 @@ from providers import Vimeo, YouTube
 
 
 class VimeoTests(TestCase):
-    def test_default_format(self):
+    def test_get_formats(self):
         video = Vimeo('5720832')
-        self.assertEqual(video.format, Vimeo.DEFAULT, 'Default value mismatch.')
+        self.assertTrue(video.formats == set(['sd', 'hd']), 'Formats mismatch. (Note: This might be a Vimeo problem)')
 
-    def test_SD(self):
-        video = Vimeo('5720832', format=None)
-        self.assertEqual(video.get_title(), 'Brand New - Jesus (Daisy sessions)', 'Invalid title.')
+    def test_best_format(self):
+        video = Vimeo('5720832')
+        self.assertEqual(video._get_best_format(), 'hd', 'Best format value mismatch.')
 
-    def test_HD(self):
-        video = Vimeo('5720832', format='hd')
+    def test_title(self):
+        video = Vimeo('5720832')
         self.assertEqual(video.get_title(), 'Brand New - Jesus (Daisy sessions)', 'Invalid title.')
 
 
 class YouTubeTests(TestCase):
-    def test_default_format(self):
+    def test_get_formats(self):
         video = YouTube('tgbNymZ7vqY')
-        self.assertEqual(video.format, YouTube.DEFAULT, 'Default value mismatch.')
+        self.assertTrue(video.formats == set(['5', '37', '35', '22', '34']), 'Formats mismatch. (Note: This might be a YouTube problem)')
 
-    def test_480p(self):
-        video = YouTube('tgbNymZ7vqY', format='35')
-        self.assertEqual(video.get_title(), 'The Muppets: Bohemian Rhapsody', 'Invalid title.')
+    def test_best_format(self):
+        video = YouTube('tgbNymZ7vqY')
+        self.assertEqual(video._get_best_format(), '37', 'Best format value mismatch.')
 
-    def test_720p(self):
-        video = YouTube('tgbNymZ7vqY', format='22')
-        self.assertEqual(video.get_title(), 'The Muppets: Bohemian Rhapsody', 'Invalid title.')
-
-    def test_1080p(self):
-        video = YouTube('tgbNymZ7vqY', format='37')
+    def test_title(self):
+        video = YouTube('tgbNymZ7vqY')
         self.assertEqual(video.get_title(), 'The Muppets: Bohemian Rhapsody', 'Invalid title.')
 
 
