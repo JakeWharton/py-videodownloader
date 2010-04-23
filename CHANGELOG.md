@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+Version 1.2.1 *(2010-04-23)*
+----------------------------
+Bug Fixes:
+
+ * Add period between file name and extension for a proper full filename.
+
 Version 1.2.0 *(2010-04-21)*
 ----------------------------
 New Features:
