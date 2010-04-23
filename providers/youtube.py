@@ -51,7 +51,7 @@ class YouTube(Provider):
     def formats(self):
         if self._formats is None:
             self._formats = set()
-            for match in re.finditer(r'itag(?:%3D|=)(\d+)', self.html):
+            for match in re.finditer(r'itag%3D(\d+)', self.html):
                 if match.group(1) not in YouTube.FORMATS.keys():
                     print 'WARNING: Unknown format "%s" found.'
                 self._formats.add(match.group(1))
@@ -60,9 +60,9 @@ class YouTube(Provider):
 
 
     def get_title(self):
-        match = re.search(r'<title>\s*YouTube\s*-\s*(.+)</title>', self.html, re.DOTALL)
+        match = re.search(r'&title=(.+)$', self.html, re.DOTALL)
         if match:
-            title = match.group(1).decode('utf-8').strip()
+            title = urllib.unquote(match.group(1).replace('+', ' '))
         else:
             title = super(YouTube, self).get_title()
 
@@ -76,7 +76,7 @@ class YouTube(Provider):
         if self.format not in YouTube.FORMATS.keys():
             filename = self.get_title() + '.video'
         else:
-            #Title + last three letters of the format description lowercased
+            #Title + dot + last three letters of the format description lowercased
             filename = self.get_title() + '.' + YouTube.FORMATS[self.format][-3:].lower()
 
         self._debug('YouTube', 'get_filename', 'filename', filename)
@@ -98,7 +98,7 @@ class YouTube(Provider):
         raise ValueError("Could not determine the best available format. YouTube has likely changed its page layout. Please contact the author of this script.")
 
     def _get_data_url(self):
-        url = 'http://youtube.com/watch?v=%s' % self.id
+        url = 'http://youtube.com/get_video_info?video_id=%s' % self.id
         self._debug('YouTube', '_get_data_url', 'url', url)
         return url
 
@@ -106,7 +106,7 @@ class YouTube(Provider):
         '''
         Magic method which extracts session token from HTML. Session token needed for video download URL
         '''
-        match = re.search(r'&t=([-_0-9a-zA-Z]+%3D)', self.html)
+        match = re.search(r'&token=([-_0-9a-zA-Z]+%3D)', self.html)
         token = urllib.unquote(match.group(1)) if match else None
         self._debug('YouTube', '_get_token', 'token', token)
         return token

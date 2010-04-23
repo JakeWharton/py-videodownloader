@@ -68,6 +68,10 @@ Thanks
     script. Check it out at
     [http://github.com/chexov/py-youtube-downloader](http://github.com/chexov/py-youtube-downloader).
 
+*   Arlo Faria
+
+    Improvement of the token, resolution, and title parsing for YouTube videos.
+
 
 License
 =======

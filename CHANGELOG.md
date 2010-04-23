@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+Version 1.2.2 *(2010-04-23)*
+----------------------------
+New Features:
+
+ * New method for parsing token, resolutions, and the title for YouTube videos.
+
 Version 1.2.1 *(2010-04-23)*
 ----------------------------
 Bug Fixes:
