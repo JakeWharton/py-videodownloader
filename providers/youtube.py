@@ -77,7 +77,7 @@ class YouTube(Provider):
             filename = self.get_title() + '.video'
         else:
             #Title + last three letters of the format description lowercased
-            filename = self.get_title() + YouTube.FORMATS[self.format][-3:].lower()
+            filename = self.get_title() + '.' + YouTube.FORMATS[self.format][-3:].lower()
 
         self._debug('YouTube', 'get_filename', 'filename', filename)
         return filename
