@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+Version 1.2.3 *(1020-05-04)*
+----------------------------
+New Features:
+
+* Installable via `easy_install` or `pip`!
+
 Version 1.2.2 *(2010-04-23)*
 ----------------------------
 New Features:
