@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from distutils.core import setup
+from setuptools import setup, find_packages
 
 setup(
     name='videodownloader',
@@ -11,9 +11,7 @@ setup(
     download_url='http://github.com/JakeWharton/py-videodownloader/downloads',
     description='Python module and script for downloading video source files from the major online streaming sites (YouTube, Vimeo, etc.)',
     long_description='Python module and script for downloading video source files from the major online streaming sites (YouTube, Vimeo, etc.)',
-    package_dir={'': 'videodownloader'},
-    py_modules='videodownloader',
-    provides=['videodownloader'],
+    packages=find_packages(),
     keywords='youtube vimeo download streaming video save',
     license='Apache License, Version 2.0',
     classifiers=[
@@ -30,6 +28,6 @@ setup(
         'Topic :: Utilities',
     ],
     scripts=[
-        'videodownloader/videodownloader.py',
+        'videodownloader/videodownloader',
     ],
 )

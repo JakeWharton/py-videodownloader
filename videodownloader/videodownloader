@@ -22,7 +22,7 @@ from optparse import OptionParser, OptionGroup
 import sys
 import os
 
-import providers
+from videodownloader import providers
 
 def main():
     DEFAULT_DEBUG = False

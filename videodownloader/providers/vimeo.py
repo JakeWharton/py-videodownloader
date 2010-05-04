@@ -16,7 +16,7 @@ Public License along with py-video-downloader.  If not, see
 <http://www.gnu.org/licenses/>.
 '''
 
-from providers import Provider
+from videodownloader.providers import Provider
 import re
 
 class Vimeo(Provider):
