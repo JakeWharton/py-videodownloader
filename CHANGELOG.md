@@ -1,7 +1,13 @@
 Change Log
 ==========
 
-Version 1.2.3 *(1020-05-04)*
+Version 1.2.4 *(2010-05-07)*
+----------------------------
+Bug Fixes:
+
+ * Convert all files to Unix-style line endings.
+
+Version 1.2.3 *(2010-05-04)*
 ----------------------------
 New Features:
 
