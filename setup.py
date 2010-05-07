@@ -28,6 +28,6 @@ setup(
         'Topic :: Utilities',
     ],
     scripts=[
-        'videodownloader/videodownloader',
+        'videodownloader/videodownloader.py',
     ],
 )
