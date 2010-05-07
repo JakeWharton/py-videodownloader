@@ -1,6 +1,17 @@
 Change Log
 ==========
 
+Version 1.3.0 *(In Development)*
+--------------------------------
+New Features:
+
+ * Supports thumbnail URL retrieval.
+ * Improved Vimeo information parsing.
+
+Bug Fixes:
+
+ * Tests properly reference the library after the folder shuffle.
+
 Version 1.2.4 *(2010-05-07)*
 ----------------------------
 Bug Fixes:
@@ -11,7 +22,7 @@ Version 1.2.3 *(2010-05-04)*
 ----------------------------
 New Features:
 
-* Installable via `easy_install` or `pip`!
+ * Installable via `easy_install` or `pip`!
 
 Version 1.2.2 *(2010-04-23)*
 ----------------------------
