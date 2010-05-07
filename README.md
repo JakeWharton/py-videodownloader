@@ -1,4 +1,4 @@
-py-video-downloader
+py-videodownloader
 ===================
 Python module and script for downloading video source files from the major
 online streaming sites (YouTube, Vimeo, etc.)
@@ -9,7 +9,7 @@ Usage
 Videos from various providers can be specified using the following command line
 format:
 
-    Usage: video-downloader.py -p PROVIDER [-f FMT] [-d DIR] videoID [... videoID]
+    Usage: videodownloader.py -p PROVIDER [-f FMT] [-d DIR] videoID [... videoID]
 
     Options:
       -h, --help            show this help message and exit
@@ -27,14 +27,14 @@ Example
 The following two commands will download a 720p video from Vimeo and a 1080p
 one from YouTube.
 
-    $ ./video-downloader.py -p Vimeo -f hd 5720832
-    $ ./video-downloader.py -p YouTube -f 37 tgbNymZ7vqY
+    $ videodownloader.py -p Vimeo -f hd 5720832
+    $ videodownloader.py -p YouTube -f 37 tgbNymZ7vqY
 
 To see a list of the formats supported by a provider run the command without
 any video IDs.
 
-    $ ./video-downloader.py -p YouTube
-    video-downloader-1.2.0 - by Jake Wharton <jakewharton@gmail.com>
+    $ videodownloader.py -p YouTube
+    videodownloader-1.2.4 - by Jake Wharton <jakewharton@gmail.com>
 
     Format     Description
     ---------- ----------------------------------------
@@ -57,7 +57,7 @@ Developed By
 * Jake Wharton - <jakewharton@gmail.com>
 
 Git repository located at
-[http://github.com/JakeWharton/py-video-downloader](http://github.com/JakeWharton/py-video-downloader)
+[http://github.com/JakeWharton/py-videodownloader](http://github.com/JakeWharton/py-videodownloader)
 
 
 Thanks
@@ -68,7 +68,7 @@ Thanks
     script. Check it out at
     [http://github.com/chexov/py-youtube-downloader](http://github.com/chexov/py-youtube-downloader).
 
-*   Arlo Faria
+*   __Arlo Faria__
 
     Improvement of the token, resolution, and title parsing for YouTube videos.
 
