@@ -60,7 +60,7 @@ class YouTube(Provider):
 
 
     def get_title(self):
-        match = re.search(r'&title=(.+)$', self.html, re.DOTALL)
+        match = re.search(r'&title=(.+?)$', self.html, re.DOTALL)
         if match:
             title = urllib.unquote_plus(match.group(1))
         else:
@@ -88,6 +88,10 @@ class YouTube(Provider):
         url = 'http://youtube.com/get_video?video_id=%s&fmt=%s&t=%s' % (self.id, self.format, self._get_token())
         self._debug('YouTube', 'get_download_url', 'url', url)
         return url
+
+    def get_thumbnail(self):
+        match = re.search(r'&thumbnail_url=(.+?)&', self.html)
+        return match.group(1) if match else None
 
 
     def _get_best_format(self):

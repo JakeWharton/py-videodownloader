@@ -43,10 +43,12 @@ class Provider(object):
 
     ###########################################################################
 
-    #The following two methods MUST be overriden by the implementing class
+    #The following three methods MUST be overriden by the implementing class
     def get_download_url(self):
         raise ImportError
     def get_filename(self):
+        raise ImportError
+    def get_thumbnail(self):
         raise ImportError
 
     #Optional override which occurs after the download url is opened by urllib2

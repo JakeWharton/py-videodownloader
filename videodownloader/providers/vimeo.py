@@ -52,7 +52,7 @@ class Vimeo(Provider):
 
 
     def get_title(self):
-        match = re.search(r'<caption>(.+)<\/caption>', self.html)
+        match = re.search(r'<caption>(.+?)<\/caption>', self.html)
         if match:
             title = match.group(1).decode('utf-8')
         else:
@@ -74,6 +74,10 @@ class Vimeo(Provider):
         self._debug('Vimeo', 'get_download_url', 'url', url)
         return url
 
+    def get_thumbnail(self):
+        match = re.search(r'<thumbnail>(.+?)<\/thumbnail>', self.html)
+        return match.group(1) if match else None
+
     def download_callback(self, url):
         self.extension = re.search(r'(mp4|flv)', url.geturl()).group(1)
         self._debug('Vimeo', 'download_callback', 'extension', self.extension)
@@ -92,13 +96,13 @@ class Vimeo(Provider):
         return url
 
     def _get_signature(self):
-        match = re.search(r'<request_signature>(.+)<\/request_signature>', self.html)
+        match = re.search(r'<request_signature>(.+?)<\/request_signature>', self.html)
         value = match.group(1) if match else None
         self._debug('Vimeo', '_get_signature', 'signature', value)
         return value
 
     def _get_signature_expiration(self):
-        match = re.search(r'<request_signature_expires>(.+)<\/request_signature_expires>', self.html)
+        match = re.search(r'<request_signature_expires>(.+?)<\/request_signature_expires>', self.html)
         value = match.group(1) if match else None
         self._debug('Vimeo', '_get_signature_expiration', 'expiration', value)
         return value
