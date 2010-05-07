@@ -24,7 +24,7 @@ import sys
 sys.path.insert(0, os.path.split(os.path.dirname(os.path.abspath(__file__)))[0])
 
 from unittest import defaultTestLoader, TestSuite, TextTestRunner, TestCase
-from providers import Vimeo, YouTube
+from videodownloader.providers import Vimeo, YouTube
 
 
 class VimeoTests(TestCase):

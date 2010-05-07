@@ -17,6 +17,7 @@ Public License along with py-video-downloader.  If not, see
 '''
 
 from videodownloader.providers import Provider
+from xml.etree import ElementTree
 import re
 
 class Vimeo(Provider):
@@ -31,32 +32,28 @@ class Vimeo(Provider):
 
         self.format = kwargs.pop('format', None)
         self.extension = 'mp4' #Set via download_callback but needs a default
-        self._html = None
+        self._xml = None
         self._formats = None
 
 
     @property
-    def html(self):
-        if self._html is None:
-            self._html = super(Vimeo, Vimeo)._download(self._get_data_url()).read()
-        return self._html
+    def xml(self):
+        if self._xml is None:
+            xml = super(Vimeo, Vimeo)._download(self._get_data_url()).read()
+            self._xml = ElementTree.fromstring(xml)
+        return self._xml
 
     @property
     def formats(self):
         if self._formats is None:
             self._formats = set(['sd'])
-            match = re.search(r'<isHD>(0|1)<\/isHD>', self.html)
-            if match and match.group(1) == '1':
+            if self.xml.findtext('video/isHD', '0') == '1':
                 self._formats.add('hd')
         return self._formats
 
 
     def get_title(self):
-        match = re.search(r'<caption>(.+?)<\/caption>', self.html)
-        if match:
-            title = match.group(1).decode('utf-8')
-        else:
-            title = super(Vimeo, self).get_title()
+        title = self.xml.findtext('video/caption', super(Vimeo, self).get_title())
         self._debug('Vimeo', 'get_title', 'title', title)
         return title
 
@@ -75,8 +72,9 @@ class Vimeo(Provider):
         return url
 
     def get_thumbnail(self):
-        match = re.search(r'<thumbnail>(.+?)<\/thumbnail>', self.html)
-        return match.group(1) if match else None
+        thumbnail = self.xml.findtext('video/thumbnail')
+        self._debug('Vimeo', 'get_thumbnail', 'thumbnail', thumbnail)
+        return thumbnail
 
     def download_callback(self, url):
         self.extension = re.search(r'(mp4|flv)', url.geturl()).group(1)
@@ -96,13 +94,11 @@ class Vimeo(Provider):
         return url
 
     def _get_signature(self):
-        match = re.search(r'<request_signature>(.+?)<\/request_signature>', self.html)
-        value = match.group(1) if match else None
+        value = self.xml.findtext('request_signature')
         self._debug('Vimeo', '_get_signature', 'signature', value)
         return value
 
     def _get_signature_expiration(self):
-        match = re.search(r'<request_signature_expires>(.+?)<\/request_signature_expires>', self.html)
-        value = match.group(1) if match else None
+        value = self.xml.findtext('request_signature_expires')
         self._debug('Vimeo', '_get_signature_expiration', 'expiration', value)
         return value
