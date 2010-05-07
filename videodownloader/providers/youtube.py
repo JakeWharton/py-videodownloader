@@ -62,7 +62,7 @@ class YouTube(Provider):
     def get_title(self):
         match = re.search(r'&title=(.+)$', self.html, re.DOTALL)
         if match:
-            title = urllib.unquote(match.group(1).replace('+', ' '))
+            title = urllib.unquote_plus(match.group(1))
         else:
             title = super(YouTube, self).get_title()
 
