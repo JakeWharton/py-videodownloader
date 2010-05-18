@@ -21,7 +21,7 @@ Public License along with py-video-downloader.  If not, see
 #Ensure we get the repository version and not an installed version
 import os
 import sys
-sys.path.insert(0, os.path.split(os.path.dirname(os.path.abspath(__file__)))[0])
+sys.path.insert(0, os.path.abspath(__file__))
 
 from unittest import defaultTestLoader, TestSuite, TextTestRunner, TestCase
 from videodownloader.providers import Vimeo, YouTube
