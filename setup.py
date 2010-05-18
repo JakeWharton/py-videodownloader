@@ -5,15 +5,18 @@ from setuptools import setup, find_packages
 setup(
     name='videodownloader',
     version='2.0.0pre',
+
     author='Jake Wharton',
     author_email='jakewharton@gmail.com',
     url='http://github.com/JakeWharton/py-videodownloader',
-    download_url='http://github.com/JakeWharton/py-videodownloader/downloads',
+    license='Apache License, Version 2.0',
+
     description='Python module and script for downloading video source files from the major online streaming sites (YouTube, Vimeo, etc.)',
     long_description='Python module and script for downloading video source files from the major online streaming sites (YouTube, Vimeo, etc.)',
-    packages=find_packages(),
     keywords='youtube vimeo download streaming video save',
-    license='Apache License, Version 2.0',
+
+    packages=['videodownloader'],
+
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
@@ -27,7 +30,8 @@ setup(
         'Topic :: Multimedia :: Video',
         'Topic :: Utilities',
     ],
+
     scripts=[
-        'videodownloader/videodownloader.py',
+        'videodownloader.py',
     ],
 )
