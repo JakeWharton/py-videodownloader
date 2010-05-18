@@ -30,29 +30,29 @@ from videodownloader.providers import Vimeo, YouTube
 class VimeoTests(TestCase):
     def test_get_formats(self):
         video = Vimeo('5720832')
-        self.assertTrue(video.formats == set(['sd', 'hd']), 'Formats mismatch. (Note: This might be a Vimeo problem)')
+        self.assertTrue(video.formats == set(['sd', 'hd']))
 
     def test_best_format(self):
         video = Vimeo('5720832')
-        self.assertEqual(video._get_best_format(), 'hd', 'Best format value mismatch.')
+        self.assertEqual(video._get_best_format(), 'hd')
 
     def test_title(self):
         video = Vimeo('5720832')
-        self.assertEqual(video.get_title(), 'Brand New - Jesus (Daisy sessions)', 'Invalid title.')
+        self.assertEqual(video.title, 'Brand New - Jesus (Daisy sessions)')
 
 
 class YouTubeTests(TestCase):
     def test_get_formats(self):
         video = YouTube('tgbNymZ7vqY')
-        self.assertTrue(video.formats == set(['5', '37', '35', '22', '34']), 'Formats mismatch. (Note: This might be a YouTube problem)')
+        self.assertTrue(video.formats == set(['5', '37', '35', '22', '34']))
 
     def test_best_format(self):
         video = YouTube('tgbNymZ7vqY')
-        self.assertEqual(video._get_best_format(), '37', 'Best format value mismatch.')
+        self.assertEqual(video._get_best_format(), '37')
 
     def test_title(self):
         video = YouTube('tgbNymZ7vqY')
-        self.assertEqual(video.get_title(), 'The Muppets: Bohemian Rhapsody', 'Invalid title.')
+        self.assertEqual(video.title, 'The Muppets: Bohemian Rhapsody [Original Version]')
 
 
 

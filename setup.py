@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='videodownloader',
-    version='1.3.0pre',
+    version='2.0.0pre',
     author='Jake Wharton',
     author_email='jakewharton@gmail.com',
     url='http://github.com/JakeWharton/py-videodownloader',

@@ -21,7 +21,7 @@ from xml.etree import ElementTree
 import re
 
 class Vimeo(Provider):
-    DEFAULT = ['hd', 'sd']
+    FORMAT_PRIORITY = ['hd', 'sd']
     FORMATS = {
         'sd': '640x360 H.264/AAC Stereo MP4',
         'hd': '1280x720 H.264/AAC Stereo MP4',
@@ -30,75 +30,56 @@ class Vimeo(Provider):
     def __init__(self, id, **kwargs):
         super(Vimeo, self).__init__(id, **kwargs)
 
-        self.format = kwargs.pop('format', None)
-        self.extension = 'mp4' #Set via download_callback but needs a default
-        self._xml = None
-        self._formats = None
+        #Load video meta information
+        url = 'http://vimeo.com/moogaloop/load/clip:%s' % self.id
+        xml = ElementTree.fromstring(super(Vimeo, Vimeo)._download(url).read())
 
+        #Get available formats
+        self.formats = set(['sd'])
+        if xml.findtext('video/isHD', '0') == '1':
+            self.formats.add('hd')
 
-    @property
-    def xml(self):
-        if self._xml is None:
-            xml = super(Vimeo, Vimeo)._download(self._get_data_url()).read()
-            self._xml = ElementTree.fromstring(xml)
-        return self._xml
+        #Get video title and filename if not explicitly set
+        if self.title is id:
+            self.title = xml.findtext('video/caption', self.title)
+        self.filename = self.title if self.filename is None else self.filename
 
-    @property
-    def formats(self):
-        if self._formats is None:
-            self._formats = set(['sd'])
-            if self.xml.findtext('video/isHD', '0') == '1':
-                self._formats.add('hd')
-        return self._formats
+        #Get magic data needed to download
+        self.request_signature  = xml.findtext('request_signature', None)
+        self.request_expiration = xml.findtext('request_signature_expires', None)
 
-
-    def get_title(self):
-        title = self.xml.findtext('video/caption', super(Vimeo, self).get_title())
-        self._debug('Vimeo', 'get_title', 'title', title)
-        return title
-
-    def get_filename(self):
-        filename = "%s.%s" % (self.get_title(), self.extension)
-        self._debug('Vimeo', 'get_filename', 'filename', filename)
-        return filename
+        #Other Vimeo-specific information
+        self.height = xml.findtext('video/height', None)
+        self.width  = xml.findtext('video/width', None)
+        self.thumbnail = xml.findtext('video/thumbnail', None)
+        self.duration  = xml.findtext('video/duration', None)
+        self.likes = xml.findtext('video/totalLikes', None)
+        self.plays = xml.findtext('video/totalPlays', None)
+        self.comments = xml.findtext('video/totalComments', None)
+        self.uploader = xml.findtext('video/uploader_display_name', None)
+        self.url = xml.findtext('video/url_clean', None)
 
     def get_download_url(self):
-        url = 'http://vimeo.com/moogaloop/play/clip:%s/%s/%s/' % (self.id, self._get_signature(), self._get_signature_expiration())
+        #Validate format
         if self.format is None:
             self.format = self._get_best_format()
+        elif self.format not in self.formats:
+            raise ValueError('Invalid format "%s". Valid formats are "%s".' % (self.format, '", "'.join(self.formats)))
+
+        url = 'http://vimeo.com/moogaloop/play/clip:%s/%s/%s/' % (self.id, self.request_signature, self.request_expiration)
         if self.format != 'sd':
             url += '?q=%s' % self.format
+
         self._debug('Vimeo', 'get_download_url', 'url', url)
         return url
 
-    def get_thumbnail(self):
-        thumbnail = self.xml.findtext('video/thumbnail')
-        self._debug('Vimeo', 'get_thumbnail', 'thumbnail', thumbnail)
-        return thumbnail
-
-    def download_callback(self, url):
-        self.extension = re.search(r'(mp4|flv)', url.geturl()).group(1)
-        self._debug('Vimeo', 'download_callback', 'extension', self.extension)
-
-
     def _get_best_format(self):
-        for format in Vimeo.DEFAULT:
+        for format in Vimeo.FORMAT_PRIORITY:
             if format in self.formats:
                 self._debug('Vimeo', '_get_best_format', 'format', format)
                 return format
-        raise ValueError("Could not determine the best available format. Vimeo has likely changed its page layout. Please contact the author of this script.")
+        raise ValueError('Could not determine the best available format. Vimeo has likely changed its page layout. Please contact the author of this script.')
 
-    def _get_data_url(self):
-        url = 'http://vimeo.com/moogaloop/load/clip:%s' % self.id
-        self._debug('Vimeo', 'get_data_url', 'url', url)
-        return url
-
-    def _get_signature(self):
-        value = self.xml.findtext('request_signature')
-        self._debug('Vimeo', '_get_signature', 'signature', value)
-        return value
-
-    def _get_signature_expiration(self):
-        value = self.xml.findtext('request_signature_expires')
-        self._debug('Vimeo', '_get_signature_expiration', 'expiration', value)
-        return value
+    def _in_download(self, url):
+        self.fileext = re.search(r'(mp4|flv)', url.geturl()).group(1)
+        self._debug('Vimeo', '_in_download', 'fileext', self.fileext)

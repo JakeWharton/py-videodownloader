@@ -27,7 +27,7 @@ from videodownloader import providers
 def main():
     DEFAULT_DEBUG = False
 
-    print 'video-downloader-1.3.0pre - by Jake Wharton <jakewharton@gmail.com>'
+    print 'video-downloader-2.0.0pre - by Jake Wharton <jakewharton@gmail.com>'
     print
 
     parser = OptionParser(usage="Usage: %prog -p PROVIDER [-f FMT] [-d DIR] videoID [... videoID]")
