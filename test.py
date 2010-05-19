@@ -37,12 +37,14 @@ class VimeoTests(TestCase):
         self.assertNotEqual(VimeoTests.video.comments, -1)
 
     def test_duration(self):
+        self.assertNotEqual(VimeoTests.video.duration, -1)
         self.assertEqual(VimeoTests.video.duration, 299)
 
     def test_formats(self):
         self.assertEqual(VimeoTests.video.formats, set(['sd', 'hd']))
 
     def test_height(self):
+        self.assertNotEqual(VimeoTests.video.height, -1)
         self.assertEqual(VimeoTests.video.height, 720)
 
     def test_likes(self):
@@ -59,15 +61,18 @@ class VimeoTests(TestCase):
 
     def test_thumbnail(self):
         self.assertNotEqual(VimeoTests.video.thumbnail, None)
+        self.assertEqual(VimeoTests.video.thumbnail, 'http://ats.vimeo.com/209/280/20928062_640.jpg')
 
     def test_title(self):
         self.assertEqual(VimeoTests.video.title, 'Brand New - Jesus (Daisy sessions)')
 
     def test_uploader(self):
         self.assertNotEqual(VimeoTests.video.uploader, None)
+        self.assertEqual(VimeoTests.video.upload, 'Wiseguy Pictures')
 
     def test_width(self):
         self.assertNotEqual(VimeoTests.video.width, -1)
+        self.assertEqual(VimeoTests.video.width, 1280)
 
 
 class YouTubeTests(TestCase):
@@ -81,6 +86,7 @@ class YouTubeTests(TestCase):
 
     def test_thumbnail(self):
         self.assertNotEqual(YouTubeTests.video.thumbnail, None)
+        self.assertEqual(YouTubeTests.video.thumbnail, 'http://i1.ytimg.com/vi/tgbNymZ7vqY/default.jpg')
 
     def test_title(self):
         self.assertEqual(YouTubeTests.video.title, 'The Muppets: Bohemian Rhapsody [Original Version]')
