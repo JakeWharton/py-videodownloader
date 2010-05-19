@@ -73,7 +73,7 @@ class YouTube(Provider):
 
         #Video thumbnail
         match = re.search(r'&thumbnail_url=(.+?)&', self._html)
-        self.thumbnail = match.group(1) if match else None
+        self.thumbnail = urllib.unquote(match.group(1)) if match else None
         self._debug('YouTube', '__init__', 'thumbnail', self.thumbnail)
 
         #Other YouTube-specific information
