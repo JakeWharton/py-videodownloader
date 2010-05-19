@@ -98,7 +98,7 @@ class Provider(object):
             #Invalid filename character fix
             if IS_WINDOWS:
                 self.filename = re.sub(ur'[?\/\\<>:"*|]+', '_', self.filename, re.UNICODE)
-            filename = self.filename + self.fileext
+            filename = '%s.%s' % (self.filename, self.fileext)
             self._debug('Provider', 'run', 'filename', filename)
 
             #Save the stream to the output file
