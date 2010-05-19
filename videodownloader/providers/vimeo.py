@@ -33,17 +33,17 @@ class Vimeo(Provider):
         #Load video meta information
         url = 'http://vimeo.com/moogaloop/load/clip:%s' % self.id
         self._debug('Vimeo', '__init__', 'Downloading "%s"...' % url)
-        xml = ElementTree.fromstring(super(Vimeo, Vimeo)._download(url).read())
+        self._xml = ElementTree.fromstring(super(Vimeo, Vimeo)._download(url).read())
 
         #Get available formats
         self.formats = set(['sd'])
-        if xml.findtext('video/isHD', '0') == '1':
+        if self._xml.findtext('video/isHD', '0') == '1':
             self.formats.add('hd')
         self._debug('Vimeo', '__init__', 'formats', ', '.join(self.formats))
 
         #Get video title if not explicitly set
         if self.title is id:
-            self.title = xml.findtext('video/caption', self.title)
+            self.title = self._xml.findtext('video/caption', self.title)
         self._debug('Vimeo', '__init__', 'title', self.title)
 
         #Get video filename if not explicity set
@@ -51,59 +51,59 @@ class Vimeo(Provider):
         self._debug('Vimeo', '__init__', 'filename', self.filename)
 
         #Get magic data needed to download
-        self.request_signature  = xml.findtext('request_signature', None)
+        self.request_signature  = self._xml.findtext('request_signature', None)
         self._debug('Vimeo', '__init__', 'request_signature', self.request_signature)
-        self.request_expiration = xml.findtext('request_signature_expires', None)
+        self.request_expiration = self._xml.findtext('request_signature_expires', None)
         self._debug('Vimeo', '__init__', 'request_expiration', self.request_expiration)
 
         #Video thumbnail
-        self.thumbnail = xml.findtext('video/thumbnail', None)
+        self.thumbnail = self._xml.findtext('video/thumbnail', None)
         self._debug('Vimeo', '__init__', 'thumbnail', self.thumbnail)
 
         #Other Vimeo-specific information:
-        self.uploader = xml.findtext('video/uploader_display_name', None)
+        self.uploader = self._xml.findtext('video/uploader_display_name', None)
         self._debug('Vimeo', '__init__', 'uploader', self.uploader)
 
-        self.url = xml.findtext('video/url_clean', None)
+        self.url = self._xml.findtext('video/url_clean', None)
         self._debug('Vimeo', '__init__', 'url', self.url)
 
         try:
-            self.height = int(xml.findtext('video/height', -1))
+            self.height = int(self._xml.findtext('video/height', -1))
         except ValueError:
             #TODO: warn
             self.height = -1
         self._debug('Vimeo', '__init__', 'height', self.height)
 
         try:
-            self.width  = int(xml.findtext('video/width', -1))
+            self.width  = int(self._xml.findtext('video/width', -1))
         except ValueError:
             #TODO: warn
             self.width = -1
         self._debug('Vimeo', '__init__', 'width', self.width)
 
         try:
-            self.duration  = int(xml.findtext('video/duration', -1))
+            self.duration  = int(self._xml.findtext('video/duration', -1))
         except ValueError:
             #TODO: warn
             self.duration = -1
         self._debug('Vimeo', '__init__', 'duration', self.duration)
 
         try:
-            self.likes = int(xml.findtext('video/totalLikes', -1))
+            self.likes = int(self._xml.findtext('video/totalLikes', -1))
         except ValueError:
             #TODO: warn
             self.likes = -1
         self._debug('Vimeo', '__init__', 'likes', self.likes)
 
         try:
-            self.plays = int(xml.findtext('video/totalPlays', -1))
+            self.plays = int(self._xml.findtext('video/totalPlays', -1))
         except ValueError:
             #TODO: warn
             self.plays = -1
         self._debug('Vimeo', '__init__', 'plays', self.plays)
 
         try:
-            self.comments = int(xml.findtext('video/totalComments', -1))
+            self.comments = int(self._xml.findtext('video/totalComments', -1))
         except ValueError:
             #TODO: warn
             self.comments = -1

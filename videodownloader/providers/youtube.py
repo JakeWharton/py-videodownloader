@@ -39,11 +39,11 @@ class YouTube(Provider):
         #Load video meta information
         url  = 'http://youtube.com/get_video_info?video_id=%s' % self.id
         self._debug('YouTube', '__init__', 'Downloading "%s"...' % url)
-        html = super(YouTube, YouTube)._download(url).read()
+        self._html = super(YouTube, YouTube)._download(url).read()
 
         #Get available formats
         self.formats = set()
-        for match in re.finditer(r'itag%3D(\d+)', html):
+        for match in re.finditer(r'itag%3D(\d+)', self._html):
             if match.group(1) not in YouTube.FORMATS.keys():
                 print 'WARNING: Unknown format "%s" found.'
             self.formats.add(match.group(1))
@@ -51,7 +51,7 @@ class YouTube(Provider):
 
         #Get video title if not explicitly set
         if self.title is id:
-            match = re.search(r'&title=(.+?)$', html, re.DOTALL)
+            match = re.search(r'&title=(.+?)$', self._html, re.DOTALL)
             if match:
                 self.title = urllib.unquote_plus(match.group(1))
                 self._debug('YouTube', '__init__', 'title', self.title)
@@ -67,12 +67,12 @@ class YouTube(Provider):
             self._debug('YouTube', '__init__', 'fileext', self.fileext)
 
         #Get magic data needed to download
-        match = re.search(r'&token=([-_0-9a-zA-Z]+%3D)', html)
+        match = re.search(r'&token=([-_0-9a-zA-Z]+%3D)', self._html)
         self.token = urllib.unquote(match.group(1)) if match else None
         self._debug('YouTube', '__init__', 'token', self.token)
 
         #Video thumbnail
-        match = re.search(r'&thumbnail_url=(.+?)&', html)
+        match = re.search(r'&thumbnail_url=(.+?)&', self._html)
         self.thumbnail = match.group(1) if match else None
         self._debug('YouTube', '__init__', 'thumbnail', self.thumbnail)
 
