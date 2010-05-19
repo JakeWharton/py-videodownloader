@@ -60,6 +60,14 @@ class Vimeo(Provider):
         self.thumbnail = self._xml.findtext('video/thumbnail', None)
         self._debug('Vimeo', '__init__', 'thumbnail', self.thumbnail)
 
+        #Video duration (seconds)
+        try:
+            self.duration  = int(self._xml.findtext('video/duration', -1))
+        except ValueError:
+            #TODO: warn
+            self.duration = -1
+        self._debug('Vimeo', '__init__', 'duration', self.duration)
+
         #Other Vimeo-specific information:
         self.uploader = self._xml.findtext('video/uploader_display_name', None)
         self._debug('Vimeo', '__init__', 'uploader', self.uploader)
@@ -80,13 +88,6 @@ class Vimeo(Provider):
             #TODO: warn
             self.width = -1
         self._debug('Vimeo', '__init__', 'width', self.width)
-
-        try:
-            self.duration  = int(self._xml.findtext('video/duration', -1))
-        except ValueError:
-            #TODO: warn
-            self.duration = -1
-        self._debug('Vimeo', '__init__', 'duration', self.duration)
 
         try:
             self.likes = int(self._xml.findtext('video/totalLikes', -1))

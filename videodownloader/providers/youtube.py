@@ -76,8 +76,32 @@ class YouTube(Provider):
         self.thumbnail = urllib.unquote(match.group(1)) if match else None
         self._debug('YouTube', '__init__', 'thumbnail', self.thumbnail)
 
+        #Video duration (seconds)
+        try:
+            match = re.search(r'&length_seconds=(\d+)&', self._html)
+            self.duration = int(match.group(1)) if match else -1
+        except ValueError:
+            #TODO: warn
+            self.duration = -1
+        self._debug('YouTube', '__init__', 'duration', self.duration)
+
         #Other YouTube-specific information
-        #...
+        match = re.search(r'&author=(.+?)&', self._html)
+        self.author = match.group(1) if match else None
+        self._debug('YouTube', '__init__', 'author', self.author)
+
+        match = re.search(r'keywords=(.+?)&', self._html)
+        self.keywords = set(urllib.unquote(match.group(1)).split(',')) if match else set([])
+        self._debug('YouTube', '__init__', 'keywords', ','.join(self.keywords))
+
+        try:
+            match = re.search(r'&avg_rating=(\d\.\d+)&', self._html)
+            self.rating = float(match.group(1)) if match else -1.0
+        except ValueError:
+            #TODO: warn
+            self.rating = -1.0
+        self._debug('YouTube', '__init__', 'rating', self.rating)
+
 
     def get_download_url(self):
         #Validate format

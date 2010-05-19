@@ -68,7 +68,7 @@ class VimeoTests(TestCase):
 
     def test_uploader(self):
         self.assertNotEqual(VimeoTests.video.uploader, None)
-        self.assertEqual(VimeoTests.video.upload, 'Wiseguy Pictures')
+        self.assertEqual(VimeoTests.video.uploader, 'Wiseguy Pictures')
 
     def test_width(self):
         self.assertNotEqual(VimeoTests.video.width, -1)
@@ -78,11 +78,26 @@ class VimeoTests(TestCase):
 class YouTubeTests(TestCase):
     video = YouTube('tgbNymZ7vqY')
 
+    def test_author(self):
+        self.assertNotEqual(YouTubeTests.video.author, None)
+        self.assertEqual(YouTubeTests.video.author, 'MuppetsStudio')
+
     def test_best_format(self):
         self.assertEqual(YouTubeTests.video._get_best_format(), '37')
 
+    def test_duration(self):
+        self.assertNotEqual(YouTubeTests.video.duration, -1)
+        self.assertEqual(YouTubeTests.video.duration, 287)
+
     def test_formats(self):
         self.assertEqual(YouTubeTests.video.formats, set(['5', '37', '35', '22', '34']))
+
+    def test_keywords(self):
+        self.assertNotEqual(YouTubeTests.video.keywords, set([]))
+        self.assertEqual(YouTubeTests.video.keywords, set(['Swedish', 'Zealand', 'Honeydew', 'Gonzo', 'Chef', 'Singing', 'Statler', 'Scooter', 'Teeth', 'Pepe', 'Frog', 'virmup', 'Brian', 'Camilla', 'Animal', 'Dr.', 'New', 'John', 'Bunny', 'virmupHD', 'Bobo', 'Eagle', 'Rock', 'Mahna', 'Electric', 'May', 'Rowlf', 'Minella', 'Bear', 'Monsters', 'Freddie', 'Opera', 'Floyd', 'Studio', 'Music', 'Lew', 'Strangepork', 'Beauregard', 'Queen', 'Beaker', 'King', 'Muppets', 'Mercury', 'Julius', 'Turkey', 'Chickens', 'Waldorf', 'Penguins', 'Zoot', 'Piggy', 'Harry', 'Newsman', 'Janice', 'Snowths', 'Bunsen', 'Deacon', 'Crazy', 'Taylor', 'Johnny', 'Sam', 'Show', 'Roger', 'Rhapsody', 'Musical', 'Sal', 'Roll', 'Prawn', 'Fozzie', 'Mayhem', 'Bohemian', 'Kermit', 'Fiama', 'Muppet', 'Miss']))
+
+    def test_rating(self):
+        self.assertNotEqual(YouTubeTests.video.rating, -1.0)
 
     def test_thumbnail(self):
         self.assertNotEqual(YouTubeTests.video.thumbnail, None)
