@@ -64,9 +64,12 @@ class YouTube(Provider):
         match = re.search(r'&token=([-_0-9a-zA-Z]+%3D)', html)
         self.token = urllib.unquote(match.group(1)) if match else None
 
-        #Other YouTube-specific information
+        #Video thumbnail
         match = re.search(r'&thumbnail_url=(.+?)&', html)
         self.thumbnail = match.group(1) if match else None
+
+        #Other YouTube-specific information
+        #...
 
     def get_download_url(self):
         #Validate format

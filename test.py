@@ -34,22 +34,22 @@ class VimeoTests(TestCase):
         self.assertEqual(VimeoTests.video._get_best_format(), 'hd')
 
     def test_comments(self):
-        self.assertNotEqual(VimeoTests.video.comments, None)
+        self.assertNotEqual(VimeoTests.video.comments, -1)
 
     def test_duration(self):
-        self.assertEqual(VimeoTests.video.duration, '299')
+        self.assertEqual(VimeoTests.video.duration, 299)
 
     def test_formats(self):
         self.assertEqual(VimeoTests.video.formats, set(['sd', 'hd']))
 
     def test_height(self):
-        self.assertEqual(VimeoTests.video.height, '720')
+        self.assertEqual(VimeoTests.video.height, 720)
 
     def test_likes(self):
-        self.assertNotEqual(VimeoTests.video.likes, None)
+        self.assertNotEqual(VimeoTests.video.likes, -1)
 
     def test_plays(self):
-        self.assertNotEqual(VimeoTests.video.plays, None)
+        self.assertNotEqual(VimeoTests.video.plays, -1)
 
     def test_request_expiration(self):
         self.assertNotEqual(VimeoTests.video.request_expiration, None)
@@ -67,7 +67,7 @@ class VimeoTests(TestCase):
         self.assertNotEqual(VimeoTests.video.uploader, None)
 
     def test_width(self):
-        self.assertNotEqual(VimeoTests.video.width, None)
+        self.assertNotEqual(VimeoTests.video.width, -1)
 
 
 class YouTubeTests(TestCase):

@@ -48,16 +48,42 @@ class Vimeo(Provider):
         self.request_signature  = xml.findtext('request_signature', None)
         self.request_expiration = xml.findtext('request_signature_expires', None)
 
-        #Other Vimeo-specific information
-        self.height = xml.findtext('video/height', None)
-        self.width  = xml.findtext('video/width', None)
+        #Video thumbnail
         self.thumbnail = xml.findtext('video/thumbnail', None)
-        self.duration  = xml.findtext('video/duration', None)
-        self.likes = xml.findtext('video/totalLikes', None)
-        self.plays = xml.findtext('video/totalPlays', None)
-        self.comments = xml.findtext('video/totalComments', None)
+
+        #Other Vimeo-specific information
         self.uploader = xml.findtext('video/uploader_display_name', None)
         self.url = xml.findtext('video/url_clean', None)
+        try:
+            self.height = int(xml.findtext('video/height', -1))
+        except ValueError:
+            #TODO: warn
+            self.height = -1
+        try:
+            self.width  = int(xml.findtext('video/width', -1))
+        except ValueError:
+            #TODO: warn
+            self.width = -1
+        try:
+            self.duration  = int(xml.findtext('video/duration', -1))
+        except ValueError:
+            #TODO: warn
+            self.duration = -1
+        try:
+            self.likes = int(xml.findtext('video/totalLikes', -1))
+        except ValueError:
+            #TODO: warn
+            self.likes = -1
+        try:
+            self.plays = int(xml.findtext('video/totalPlays', -1))
+        except ValueError:
+            #TODO: warn
+            self.plays = -1
+        try:
+            self.comments = int(xml.findtext('video/totalComments', -1))
+        except ValueError:
+            #TODO: warn
+            self.comments = -1
 
     def get_download_url(self):
         #Validate format
