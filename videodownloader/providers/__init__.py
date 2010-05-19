@@ -95,10 +95,10 @@ class Provider(object):
             self._debug('Provider', 'run', 'Running in-download callback.')
             self._in_download(url)
 
-            filename = self.filename + self.fileext
             #Invalid filename character fix
             if IS_WINDOWS:
-                filename = re.sub(ur'[?\[\]\/\\=+<>:;",*]+', '_', filename, re.UNICODE)
+                self.filename = re.sub(ur'[?\/\\<>:"*|]+', '_', self.filename, re.UNICODE)
+            filename = self.filename + self.fileext
             self._debug('Provider', 'run', 'filename', filename)
 
             #Save the stream to the output file
