@@ -32,29 +32,44 @@ class Provider(object):
     }
 
     def __init__(self, id, title=None, ext='video', format=None, debug=False):
-        self.id = id
-        self.title = id if title is None else title
-        self.format = format
-        self.fileext = ext
-        self.filename = title
+        #Save debugging flag immediately
         self.debugging = debug
+
+        self.id = id
+        self._debug('Provider', '__init__', 'id', self.id)
+
+        self.title = id if title is None else title
+        self._debug('Provider', '__init__', 'title', self.title)
+
+        self.format = format
+        if self.format is not None:
+            self._debug('Provider', '__init__', 'format', self.format)
+
+        self.fileext = ext
+        self._debug('Provider', '__init__', 'fileext', self.fileext)
+
+        self.filename = title
+        self._debug('Provider', '__init__', 'filename', self.filename)
 
 
     def _pre_download(self):
         '''
         Optional callback which occurs before the download takes place.
         '''
-        pass
+        self._debug('Provider', '_pre_download', 'No callback supplied.')
+
     def _in_download(self, url):
         '''
         Optional callback which occurs after the download url is opened by urllib2.
         '''
-        pass
+        self._debug('Provider', '_in_download', 'No callback supplied.')
+
     def _post_download(self, success):
         '''
         Optional callback which occurs after the download has finished.
         '''
-        pass
+        self._debug('Provider', '_post_download', 'No callback supplied.')
+
     def get_download_url(self):
         '''
         Required to be overriden by implementing class
@@ -66,6 +81,7 @@ class Provider(object):
         Download the video.
         '''
         #Callback
+        self._debug('Provider', 'run', 'Running pre-download callback.')
         self._pre_download()
 
         url = None
@@ -76,6 +92,7 @@ class Provider(object):
             url = Provider._download(self.get_download_url())
 
             #Callback
+            self._debug('Provider', 'run', 'Running in-download callback.')
             self._in_download(url)
 
             filename = self.filename + self.fileext
@@ -84,9 +101,11 @@ class Provider(object):
                 filename = re.sub(ur'[?\[\]\/\\=+<>:;",*]+', '_', filename, re.UNICODE)
             self._debug('Provider', 'run', 'filename', filename)
 
+            #Save the stream to the output file
             out = open(filename, 'wb')
             out.write(url.read())
 
+            #We are done therefore success!
             success = True
         finally:
             if out is not None:
@@ -95,6 +114,8 @@ class Provider(object):
                 url.close()
 
             #Callback
+            self._debug('Provider', 'run', 'Running post-download callback.')
+            self._debug('Provider', 'run', 'success', success)
             self._post_download(success)
 
     def _debug(self, cls, method, *args):
