@@ -1,12 +1,17 @@
 Change Log
 ==========
 
-Version 1.3.0 *(In Development)*
+Version 2.0.0 *(2010-05-19)*
 --------------------------------
+Rewrite of a significant portion of the codebase to be more modular and easier to extend.
+
 New Features:
 
  * Supports thumbnail URL retrieval.
  * Improved Vimeo information parsing.
+ * All data is stored in instance properties.
+ * Provider-specific metadata is now retrieved.
+ * Specify custom title and extension for videos.
 
 Bug Fixes:
 

@@ -13,14 +13,17 @@ format:
 
     Options:
       -h, --help            show this help message and exit
-      -f FMT, --format=FMT  Format of video to download. Run with no video IDs for
+      -e EXT, --ext=EXT     Manually override video extension.
+      -f FORMAT, --format=FORMAT
+                            Format of video to download. Run with no video IDs for
                             a provider specific list.
-      -d DIR, --directory=DIR
-                            Other directory to place downloaded files.
+      -t TITLE, --title=TITLE
+                            Manually override video title.
       -p PROVIDER, --provider=PROVIDER
                             Online provider from where to download the video.
                             (Available: 'Vimeo', 'YouTube')
       --debug               Enable debugging output.
+
 
 Example
 -------
@@ -34,7 +37,7 @@ To see a list of the formats supported by a provider run the command without
 any video IDs.
 
     $ videodownloader.py -p YouTube
-    videodownloader-1.2.4 - by Jake Wharton <jakewharton@gmail.com>
+    videodownloader-2.0.0 - by Jake Wharton <jakewharton@gmail.com>
 
     Format     Description
     ---------- ----------------------------------------

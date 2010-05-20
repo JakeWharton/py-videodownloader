@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='videodownloader',
-    version='2.0.0pre',
+    version='2.0.0',
 
     author='Jake Wharton',
     author_email='jakewharton@gmail.com',
@@ -15,7 +15,7 @@ setup(
     long_description='Python module and script for downloading video source files from the major online streaming sites (YouTube, Vimeo, etc.)',
     keywords='youtube vimeo download streaming video save',
 
-    packages=['videodownloader'],
+    packages=find_packages(),
 
     classifiers=[
         'Development Status :: 5 - Production/Stable',
@@ -31,7 +31,9 @@ setup(
         'Topic :: Utilities',
     ],
 
-    scripts=[
-        'videodownloader.py',
-    ],
+    entry_points = {
+        'console_scripts': [
+            'videodownloader = videodownloader.main:main',
+        ],
+    },
 )
