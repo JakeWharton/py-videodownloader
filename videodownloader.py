@@ -33,8 +33,9 @@ def main():
     parser = OptionParser(usage="Usage: %prog -p PROVIDER [-f FMT] [-d DIR] videoID [... videoID]")
 
     provider_list = ', '.join(["'%s'" % provider for provider in providers.__all__])
-    parser.add_option('-f', '--format', dest='fmt', help='Format of video to download. Run with no video IDs for a provider specific list.')
-    parser.add_option('-d', '--directory', dest='dir', help='Other directory to place downloaded files.')
+    parser.add_option('-e', '--ext', dest='ext', help='Manually override video extension.')
+    parser.add_option('-f', '--format', dest='format', help='Format of video to download. Run with no video IDs for a provider specific list.')
+    parser.add_option('-t', '--title', dest='title', help='Manually override video title.')
     parser.add_option('-p', '--provider', dest='provider', help='Online provider from where to download the video. (Available: %s)'%provider_list)
     parser.add_option('--debug', dest='is_debug', action='store_true', default=DEFAULT_DEBUG, help='Enable debugging output.')
 
@@ -54,8 +55,8 @@ def main():
             print '%-10s %-40s' % format
     else:
         for video in videos:
-            v = provider(video, format=options.fmt, dir=options.dir, debug=options.is_debug)
-            print 'Downloading "%s"...' % v.get_title()
+            v = provider(video, title=options.title, format=options.format, ext=options.ext, debug=options.is_debug)
+            print 'Downloading "%s"...' % v.title
             try:
                 v.run()
             except KeyboardInterrupt:
@@ -63,7 +64,7 @@ def main():
 
                 #Try to delete partially completed file
                 try:
-                    os.remove(v.out_file)
+                    os.remove(v.full_filename)
                 except IOError:
                     print 'WARNING: Could not remove partial file.'
             except (urllib2.HTTPError, IOError):

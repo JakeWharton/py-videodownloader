@@ -51,6 +51,8 @@ class Provider(object):
         self.filename = title
         self._debug('Provider', '__init__', 'filename', self.filename)
 
+        self.full_filename = None
+
 
     def _pre_download(self):
         '''
@@ -97,13 +99,18 @@ class Provider(object):
 
             #Invalid filename character fix
             if IS_WINDOWS:
-                self.filename = re.sub(ur'[?\/\\<>:"*|]+', '_', self.filename, re.UNICODE)
-            filename = '%s.%s' % (self.filename, self.fileext)
-            self._debug('Provider', 'run', 'filename', filename)
+                filename = re.sub(ur'[?\/\\<>:"*|]+', '_', self.filename, re.UNICODE)
+            self.full_filename = '%s.%s' % (filename, self.fileext)
+            self._debug('Provider', 'run', 'full_filename', self.full_filename)
 
-            #Save the stream to the output file
-            out = open(filename, 'wb')
-            out.write(url.read())
+            if not os.path.isfile(self.full_filename):
+                #Save the stream to the output file
+                out = open(self.full_ilename, 'wb')
+                out.write(url.read())
+            else:
+                #Skipping
+                #TODO: warn
+                pass
 
             #We are done therefore success!
             success = True
