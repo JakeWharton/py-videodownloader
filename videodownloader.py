@@ -26,7 +26,6 @@ from videodownloader import providers
 
 def main():
     DEFAULT_DEBUG = False
-    DEFAULT_EXT = 'video'
 
     print 'video-downloader-2.0.0pre - by Jake Wharton <jakewharton@gmail.com>'
     print
@@ -34,7 +33,7 @@ def main():
     parser = OptionParser(usage="Usage: %prog -p PROVIDER [-f FMT] [-d DIR] videoID [... videoID]")
 
     provider_list = ', '.join(["'%s'" % provider for provider in providers.__all__])
-    parser.add_option('-e', '--ext', dest='ext', default=DEFAULT_EXT, help='Manually override video extension.')
+    parser.add_option('-e', '--ext', dest='ext', default=providers.Provider.DEFAULT_EXT, help='Manually override video extension.')
     parser.add_option('-f', '--format', dest='format', help='Format of video to download. Run with no video IDs for a provider specific list.')
     parser.add_option('-t', '--title', dest='title', help='Manually override video title.')
     parser.add_option('-p', '--provider', dest='provider', help='Online provider from where to download the video. (Available: %s)'%provider_list)

@@ -110,6 +110,10 @@ class YouTube(Provider):
         elif self.format not in self.formats:
             raise ValueError('Invalid format "%s". Valid formats are "%s".' % (self.format, '", "'.join(self.formats)))
 
+        #Check extension
+        if self.fileext is None or self.fileext == Provider.DEFAULT_EXT:
+            self.fileext = YouTube.FORMATS[self.format][-3:].lower()
+
         url = 'http://youtube.com/get_video?video_id=%s&fmt=%s&t=%s' % (self.id, self.format, self.token)
 
         self._debug('YouTube', 'get_download_url', 'url', url)

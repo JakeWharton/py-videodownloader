@@ -27,11 +27,12 @@ __all__ = ['Vimeo', 'YouTube']
 IS_WINDOWS = (sys.platform == 'win32' or sys.platform == 'cygwin')
 
 class Provider(object):
+    DEFAULT_EXT = 'video'
     HEADERS = {
         'User-Agent': 'Mozilla/5.0 (X11; U; Linux i686) Gecko/20071127 Firefox/2.0.0.11',
     }
 
-    def __init__(self, id, title=None, ext='video', format=None, debug=False):
+    def __init__(self, id, title=None, ext=DEFAULT_EXT, format=None, debug=False):
         #Save debugging flag immediately
         self.debugging = debug
 
