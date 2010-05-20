@@ -105,7 +105,7 @@ class Provider(object):
 
             if not os.path.isfile(self.full_filename):
                 #Save the stream to the output file
-                out = open(self.full_ilename, 'wb')
+                out = open(self.full_filename, 'wb')
                 out.write(url.read())
             else:
                 #Skipping
