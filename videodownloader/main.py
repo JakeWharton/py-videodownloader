@@ -21,6 +21,7 @@ Public License along with py-video-downloader.  If not, see
 from optparse import OptionParser, OptionGroup
 import sys
 import os
+import urllib2
 
 from videodownloader import providers
 
