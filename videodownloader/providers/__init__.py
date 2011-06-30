@@ -100,8 +100,8 @@ class Provider(object):
 
             #Invalid filename character fix
             if IS_WINDOWS:
-                filename = re.sub(ur'[?\/\\<>:"*|]+', '_', self.filename, re.UNICODE)
-            self.full_filename = '%s.%s' % (filename, self.fileext)
+                self.filename = re.sub(ur'[?\/\\<>:"*|]+', '_', self.filename, re.UNICODE)
+            self.full_filename = '%s.%s' % (self.filename, self.fileext)
             self._debug('Provider', 'run', 'full_filename', self.full_filename)
 
             if not os.path.isfile(self.full_filename):
