@@ -68,7 +68,9 @@ def main():
                     os.remove(v.full_filename)
                 except IOError:
                     print 'WARNING: Could not remove partial file.'
-            except (urllib2.HTTPError, IOError):
+            except (urllib2.HTTPError, IOError) as e:
+                if options.is_debug:
+                    print e
                 print "ERROR: Fatal HTTP error."
 
         print
