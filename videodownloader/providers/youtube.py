@@ -45,7 +45,7 @@ class YouTube(Provider):
         self.formats = set()
         for match in re.finditer(r'itag%3D(\d+)', self._html):
             if match.group(1) not in YouTube.FORMATS.keys():
-                print 'WARNING: Unknown format "%s" found.'
+                print 'WARNING: Unknown format "%s" found.' % match.group(1)
             self.formats.add(match.group(1))
         self._debug('YouTube', '__init__', 'formats', ', '.join(self.formats))
 
