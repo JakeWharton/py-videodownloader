@@ -51,7 +51,7 @@ class YouTube(Provider):
 
         #Get video title if not explicitly set
         if self.title is id:
-            match = re.search(r'&title=(.+?)$', self._html, re.DOTALL)
+            match = re.search(r'&title=([^&]+)', self._html, re.DOTALL)
             if match:
                 self.title = urllib.unquote_plus(match.group(1))
                 self._debug('YouTube', '__init__', 'title', self.title)
