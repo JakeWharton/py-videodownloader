@@ -61,7 +61,7 @@ class VimeoTests(TestCase):
 
     def test_thumbnail(self):
         self.assertNotEqual(VimeoTests.video.thumbnail, None)
-        self.assertEqual(VimeoTests.video.thumbnail, 'http://ats.vimeo.com/209/280/20928062_640.jpg')
+        self.assertEqual(VimeoTests.video.thumbnail, 'http://b.vimeocdn.com/ts/209/280/20928062_640.jpg')
 
     def test_title(self):
         self.assertEqual(VimeoTests.video.title, 'Brand New - Jesus (Daisy sessions)')
