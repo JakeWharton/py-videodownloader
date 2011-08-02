@@ -37,7 +37,7 @@ class YouTube(Provider):
         super(YouTube, self).__init__(id, **kwargs)
 
         #Load video meta information
-        url  = 'http://youtube.com/get_video_info?video_id=%s' % self.id
+        url  = 'http://www.youtube.com/get_video_info?video_id=%s' % self.id
         self._debug('YouTube', '__init__', 'Downloading "%s"...' % url)
         self._html = super(YouTube, YouTube)._download(url).read()
 
