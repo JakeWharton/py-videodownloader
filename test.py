@@ -104,7 +104,7 @@ class YouTubeTests(TestCase):
         self.assertEqual(YouTubeTests.video.thumbnail, 'http://i1.ytimg.com/vi/tgbNymZ7vqY/default.jpg')
 
     def test_title(self):
-        self.assertEqual(YouTubeTests.video.title, 'The Muppets: Bohemian Rhapsody [Original Version]')
+        self.assertEqual(YouTubeTests.video.title, 'The Muppets: Bohemian Rhapsody')
 
     def test_token(self):
         self.assertNotEqual(YouTubeTests.video.token, None)
