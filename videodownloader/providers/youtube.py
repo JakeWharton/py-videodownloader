@@ -21,7 +21,7 @@ import re
 import urllib
 
 class YouTube(Provider):
-    FORMAT_PRIORITY = ['37', '22', '35', '18', '34', '5']
+    FORMAT_PRIORITY = ['37', '22', '45', '44', '35', '43', '18', '34', '5']
     FORMATS = {
         '5' : '320x240 H.263/MP3 Mono FLV',
         '13': '176x144 3GP/AMR Mono 3GP',
@@ -31,6 +31,9 @@ class YouTube(Provider):
         '34': '320x240 H.264/AAC Stereo FLV',
         '35': '640x480/640x360 H.264/AAC Stereo FLV',
         '37': '1920x1080 H.264/AAC Stereo MP4',
+        '43': '640x360 VP8/Vorbis Stereo MP4',
+        '44': '854x480 VP8/Vorbis Stereo MP4',
+        '45': '1280x720 VP8/Vorbis Stereo MP4',
     }
 
     def __init__(self, id, **kwargs):
